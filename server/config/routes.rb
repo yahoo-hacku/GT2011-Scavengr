@@ -10,6 +10,7 @@ Huntr::Application.routes.draw do
   namespace 'api' do
     get "login" => 'users#login'
     get "logout" => 'users#logout'
+    resoucres :quests
   end
 
   # root :to => "welcome#index"
