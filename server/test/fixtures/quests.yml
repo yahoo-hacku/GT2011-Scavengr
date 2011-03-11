@@ -1,0 +1,15 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  seq: 1
+  created_by_id: 
+  description: MyText
+  time_limit: 1
+  active: false
+
+two:
+  seq: 1
+  created_by_id: 
+  description: MyText
+  time_limit: 1
+  active: false

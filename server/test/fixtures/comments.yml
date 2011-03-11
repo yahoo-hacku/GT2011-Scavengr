@@ -1,0 +1,13 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  quest: 
+  user: 
+  text: MyText
+  rating: 1
+
+two:
+  quest: 
+  user: 
+  text: MyText
+  rating: 1

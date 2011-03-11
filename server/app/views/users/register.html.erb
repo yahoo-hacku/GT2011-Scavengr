@@ -1,0 +1,9 @@
+<% form_for @user, url: register_url do |f| %>
+  <%= error_messages_for :user %>
+ 
+  Username: <%= f.text_field :name %><br/>
+  Email: <%= f.text_field :email %><br/>
+  Password: <%= f.password_field :password %><br/>
+  Confirm Password: <%= f.password_field :password_confirmation %><br/>
+  <%= f.submit "Register"  %>
+<% end %>

@@ -1,0 +1,17 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  quest: 
+  seq: 1
+  lat: 9.99
+  long: 9.99
+  clue: MyText
+  error_radius: 9.99
+
+two:
+  quest: 
+  seq: 1
+  lat: 9.99
+  long: 9.99
+  clue: MyText
+  error_radius: 9.99
