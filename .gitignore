@@ -3,3 +3,5 @@ server/db/*.sqlite3
 server/log/*.log
 server/tmp/
 server/Gemfile.lock
+app/gen
+app/bin
