@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eclipse-userlibraries>
+  <library name="Android 2.2 Platform">
+    <archive path="/opt/google/android/android-current/platforms/android-8/android.jar" />
+  </library>
+  <library name="Android 2.3 Platform">
+    <archive path="/opt/google/android/android-current/platforms/android-9/android.jar" />
+  </library>
+</eclipse-userlibraries>
+
