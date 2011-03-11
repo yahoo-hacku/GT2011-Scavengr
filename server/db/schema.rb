@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110311222627) do
+ActiveRecord::Schema.define(:version => 20110311223144) do
 
   create_table "auth_tokens", :force => true do |t|
     t.string   "token"
@@ -54,6 +54,14 @@ ActiveRecord::Schema.define(:version => 20110311222627) do
     t.integer  "quest_id"
     t.datetime "started"
     t.datetime "completed"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "user_steps", :force => true do |t|
+    t.integer  "user_quest_id"
+    t.integer  "step_id"
+    t.datetime "datecompleted"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
