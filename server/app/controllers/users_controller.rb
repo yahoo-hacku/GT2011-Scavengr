@@ -6,7 +6,7 @@ class UsersController < ApplicationController
   
   def do_login
     @user = User.find_by_name(params[:name])
-    if @user.pass == params[:password]
+    if @user and @user.pass == params[:password]
       session[:user_id] = @user.id
       redirect_to root_url, notice: "Login Successful"
     else

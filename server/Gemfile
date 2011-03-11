@@ -11,6 +11,10 @@ gem 'sqlite3'
 
 gem 'bcrypt-ruby'
 
+# UUID
+
+gem 'uuidtools'
+
 # Use unicorn as the web server
 # gem 'unicorn'
 
