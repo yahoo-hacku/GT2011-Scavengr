@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110311220228) do
+ActiveRecord::Schema.define(:version => 20110311222314) do
 
   create_table "auth_tokens", :force => true do |t|
     t.string   "token"
@@ -34,6 +34,17 @@ ActiveRecord::Schema.define(:version => 20110311220228) do
     t.text     "description"
     t.integer  "time_limit"
     t.boolean  "active"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "steps", :force => true do |t|
+    t.integer  "quest_id"
+    t.integer  "seq"
+    t.decimal  "lat"
+    t.decimal  "long"
+    t.text     "clue"
+    t.decimal  "error_radius"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
