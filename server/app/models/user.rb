@@ -1,6 +1,10 @@
 require 'bcrypt'
 
 class User < ActiveRecord::Base
+  has_many :quests
+  has_many :user_quests
+  has_many :comments
+  
   attr_accessor :password
   
   validates_uniqueness_of :name, :email
