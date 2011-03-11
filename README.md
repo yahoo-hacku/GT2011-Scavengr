@@ -1,4 +1,4 @@
-Hack Week 2011 -- Scavengr
+Hack Week 2011 -- Huntr
 ==========================
 
 A social scavenger hunt (or "Quest") system. Quests can be created online and shared with friends who can then use their Android devices to get clues and verify that they have found a location. 
@@ -7,4 +7,3 @@ A social scavenger hunt (or "Quest") system. Quests can be created online and sh
 
 * Alex Milstead ([xanderal](https://github.com/xanderal "Alex's Github"))
 * Ben Olive ([sionide21](https://github.com/sionide21 "Ben's Github"))
-* Mike Hirth 
