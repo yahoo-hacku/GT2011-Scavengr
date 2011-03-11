@@ -10,6 +10,8 @@ Huntr::Application.routes.draw do
   namespace 'api' do
     get "login" => 'users#login'
     get "logout" => 'users#logout'
+    get "register" => 'users#register'
+    get "ping" => 'users#ping'
     resources :quests
   end
 
