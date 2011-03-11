@@ -1,4 +1,14 @@
 Huntr::Application.routes.draw do
+  get "login" => 'users#login', as: 'login'
+  post 'login' => 'users#do_login'
+
+  get "logout" => 'users#logout'
+  
+  match "register" => 'users#register'
+#  get "user/new"
+#  get "user/create"
+#  get "user/show"
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

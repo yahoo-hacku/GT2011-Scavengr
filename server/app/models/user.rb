@@ -1,14 +1,22 @@
 require 'bcrypt'
 
 class User < ActiveRecord::Base
-  include BCrypt
+  attr_accessor :password
   
-  def password
-    @password ||= Password.new(password_hash)
+  validates_uniqueness_of :name, :email
+  validates_confirmation_of :password  
+  validates_presence_of :password, :on => :create
+  
+  before_save :encrypt_password
+  
+  def pass
+    @pass ||= BCrypt::Password.new(password_hash) if password_hash.present?
   end
-
-  def password=(new_password)
-    @password = Password.create(new_password)
-    self.password_hash = @password
+  
+  def encrypt_password  
+    if password.present?
+      self.password_hash = BCrypt::Password.create(password)  
+      self.password = nil
+    end  
   end
 end
