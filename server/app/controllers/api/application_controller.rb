@@ -13,7 +13,10 @@ class Api::ApplicationController < ActionController::Base
   def update
     @active_object.attributes = @active_params
     @active_object.save!
-    respond_with(@active_object, :location => [:api, @active_object])
+    respond_to do |format| 
+      format.json { render json: @active_object }
+      format.xml { render xml: @active_object }
+    end
   end
   alias :create :update
 
