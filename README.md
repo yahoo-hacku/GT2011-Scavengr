@@ -7,3 +7,4 @@ A social scavenger hunt (or "Quest") system. Quests can be created online and sh
 
 * Alex Milstead ([xanderal](https://github.com/xanderal "Alex's Github"))
 * Ben Olive ([sionide21](https://github.com/sionide21 "Ben's Github"))
+* Mike Hirth ([hirthy](https://github.com/hirthy "Mike's Github"))
