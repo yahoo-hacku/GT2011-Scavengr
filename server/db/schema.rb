@@ -29,7 +29,6 @@ ActiveRecord::Schema.define(:version => 20110312102118) do
   end
 
   create_table "quests", :force => true do |t|
-    t.integer  "seq"
     t.integer  "created_by_id"
     t.text     "description"
     t.integer  "time_limit"

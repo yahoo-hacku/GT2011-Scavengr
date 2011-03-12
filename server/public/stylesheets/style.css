@@ -1,0 +1,23 @@
+.left {
+	float: left;
+	width: 300px;
+}
+
+.step {
+	width: 100%;
+	background: #eeeeff;
+}
+
+.step p {
+	font-weight: bold;
+}
+
+.step .geo {
+	font-family: monospace;
+}
+
+.main {
+	width: 100%;
+	height: 100%;
+	background: black;
+}
