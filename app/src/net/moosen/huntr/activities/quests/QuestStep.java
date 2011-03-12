@@ -25,8 +25,8 @@ public class QuestStep extends Activity {
         setContentView(R.layout.quest_step);
         final String clue = getIntent().getStringExtra("clue");
         final Integer seq = getIntent().getIntExtra("seq", 0);
-        ((TextView) findViewById(R.id.step_num)).setText(seq.toString());
-        ((TextView) findViewById(R.id.step_clue)).setText(clue);
+        ((TextView) findViewById(R.id.step_num)).setText("Quest ID: " + seq.toString());
+        ((TextView) findViewById(R.id.step_clue)).setText("Quest Clue: " + clue);
 
         // etc
     }
