@@ -1,41 +1,46 @@
 class Api::ApplicationController < ActionController::Base
   before_filter :require_user, :map_params
 
-  rescue_from ActiveRecord::RecordNotFound, :with => :record_not_found
-  rescue_from ActiveRecord::RecordInvalid, :with => :record_invalid
+  rescue_from ActiveRecord::RecordNotFound, :with => :smart_error_response
+  rescue_from ActiveRecord::RecordInvalid, :with => :smart_error_response
 
   respond_to :json, :xml
 
+  def show
+    respond_with(@active_object)
+  end
+
+  def update
+    @active_object.attributes = @active_params
+    @active_object.save!
+    respond_with(@active_object, :location => [:api, @active_object])
+  end
+  alias :create :update
+
+  def destroy
+    @active_object.destroy
+    respond_with(@active_object)
+  end
+
   private
-
-  # CRUD Helpers
-
-  def show_object(object)
-    logger.debug("Showing #{@object_type}")
-    return respond_with(object)
-  end
-
-  def update_object(object, p)
-    logger.debug("#{object.new_record? ? 'Creating' : 'Updating'} #{@object_type}")
-    object.attributes = p
-    object.save!
-    return respond_with(object)
-  end
-
-  def delete_object(object, type)
-    logger.debug("Showing #{@object_type}")
-    object.destroy
-    return respond_with(object)
-  end
 
   # Error Handling
 
-  def record_not_found
-    respond_with({error: "Entry does not exist."})
-  end
-
-  def record_invalid(e)
-    respond_with(e.record)
+  def smart_error_response(e)
+    message = { error: '' }
+    status = 400
+    if e.respond_to?(:record) && e.record.errors
+      message[:validations] = e.record.errors.full_messages
+      message[:error] = 'Record Invalid'
+      status = 422
+    else
+      message[:error] = 'Record Not Found'
+      status = 404
+    end
+    respond_to do |format| 
+      format.json { render :json => message, :status => status }
+      format.xml { render :xml => message, :status => status }
+    end    
   end
 
   # filters

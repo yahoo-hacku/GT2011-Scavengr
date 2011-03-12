@@ -1,28 +1,14 @@
-require 'uuidtools'
-
 class Api::QuestsController < Api::ApplicationController
-  before_filter :load_quest, :only => [ :create, :show, :update, :destroy ]
+  before_filter :setup_api, :except => [ :index ]
 
   def index
     respond_with @user.quests
   end
 
-  def show
-    show_object @quest
-  end
-
-  def update
-    update_object @quest, params[:quest]
-  end
-  alias :create :update
-
-  def destroy
-    delete_object @quest
-  end
-
   private
 
-  def load_quest
-    @quest = params[:id] ? @user.quests.find(params[:id]) : @user.quests.build
-  end  
+  def setup_api
+    @active_object = params[:id] ? @user.quests.find(params[:id]) : @user.quests.build
+    @active_params = params[:quest]
+  end
 end
