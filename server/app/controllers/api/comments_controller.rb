@@ -12,7 +12,7 @@ class Api::CommentsController < Api::ApplicationController
     @quest = @user.quests.find(params[:quest_id])
     @active_params = params[:comment]
     if params[:action] == 'create'
-      @active_object = @quest.comments.build
+      @active_object = @quest.comments.build(:user => @user)
     else
       @active_object = @quest.comments.find(params[:id])
     end

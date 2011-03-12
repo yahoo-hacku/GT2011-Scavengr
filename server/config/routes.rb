@@ -12,7 +12,9 @@ Huntr::Application.routes.draw do
     get "logout" => 'users#logout'
     get "register" => 'users#register'
     get "ping" => 'users#ping'
-    resources :user_quests
+    resources :user_quests do
+      resources :user_steps
+    end
     resources :quests do
       resources :steps
       resources :comments
