@@ -73,6 +73,10 @@ class Api::ApplicationController < ActionController::Base
   end
 
   def require_user
+    if session[:user_id] # We are using the session DONE!
+      @user = User.find(session[:user_id])
+      return
+    end
     authenticate_or_request_with_http_basic do |username, key|
       @token = AuthToken.find_by_token(key)
       if @token and @token.user.name == username

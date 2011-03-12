@@ -2,6 +2,8 @@ Huntr::Application.routes.draw do
   get "quests/index"
 
   get "quests/show"
+  
+  get "js_api_key" => "users#js_api"
 
   get "login" => 'users#login', as: 'login'
   post 'login' => 'users#do_login'
@@ -22,7 +24,9 @@ Huntr::Application.routes.draw do
       resources :user_steps, as: 'steps'
     end
     resources :quests do
-      resources :steps
+      resources :steps do
+        get :next_seq, :on => :collection
+      end
       resources :comments
     end
   end

@@ -13,7 +13,7 @@ class Step < ActiveRecord::Base
   
   def next_seq
     count = self.quest.steps.maximum(:seq)
-    return count + 1
+    return (count || 0) + 1
   end
     
   private

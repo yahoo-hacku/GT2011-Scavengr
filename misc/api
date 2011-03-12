@@ -1,7 +1,7 @@
 #! /bin/bash
 
 USER=ben
-KEY=4a4f2e6a-4c40-11e0-93ce-002241fffe53
+KEY=710f39e0-4cb9-11e0-b082-002241fffe53
 HOST=localhost
 
 VERB=$1

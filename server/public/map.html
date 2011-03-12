@@ -1,0 +1,30 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+ "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+   <title>Huntr</title>
+   <link rel="stylesheet" href="http://yui.yahooapis.com/2.7.0/build/reset-fonts-grids/reset-fonts-grids.css" type="text/css">
+   <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.8.0r4/build/base/base-min.css">
+   <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.8.0r4/build/fonts/fonts-min.css" />
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.8.0r4/build/button/assets/skins/sam/button.css" />
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.8.0r4/build/container/assets/skins/sam/container.css" />
+</head>
+<body onunload="GUnload()" class="yui-skin-sam">
+	
+	<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=false&amp;key=ABQIAAAAGDdf_nC4iDfqhvjcgc-9GBQoRtT7WMMfqjastn1YMcb_xa202xRqrdfywvew-1OKeWV9C02GyHC0jA" type="text/javascript"></script>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.js"></script>
+	<script type="text/javascript" src="/javascripts/map.js"></script>
+	<script type="text/javascript">
+		$(function() {
+			map = new GMap2(document.getElementById("map_canvas"));
+			// Georgia Tech
+			map.setCenter(new GLatLng(33.7784626, -84.3988806), 15);
+		  
+			map.setUIToDefault();
+			do_init_api(map);
+		});
+	</script>
+	
+	<div id="map_canvas" style="position:absolute; top:0; bottom: 0; left: 0; right: 0;"></div>
+</body>
+</html>
