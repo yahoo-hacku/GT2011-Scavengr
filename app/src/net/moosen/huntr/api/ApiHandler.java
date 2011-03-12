@@ -9,6 +9,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import android.content.SharedPreferences;
+import android.text.GetChars;
 import android.util.Base64;
 import android.util.Log;
 import android.util.Pair;
@@ -55,7 +56,11 @@ public class ApiHandler
         REGISTER("register", "GET"){
             public void handleResponse(final InputStream response)
             {
-
+                Gson gson = new Gson();
+                Reader response_reader = new InputStreamReader(response);
+                ApiToken token = gson.fromJson(response_reader, ApiToken.class);
+                GetInstance().setToken(token);
+                GetInstance().writeCredentials();
             }
         },
         LOGIN("login", "GET")
@@ -73,7 +78,7 @@ public class ApiHandler
         {
             public void handleResponse(final InputStream response)
             {
-
+                GetInstance().clearCredentials();
             }
         },
         QUESTS("quests", "GET")
@@ -100,9 +105,6 @@ public class ApiHandler
         {
             return this.http_verb;
         }
-
-
-
         protected abstract void handleResponse(final InputStream response) throws AuthenticationException;
     }
 
@@ -119,18 +121,33 @@ public class ApiHandler
 
     private void setToken(final ApiToken token)
     {
+        Log.d(getClass().getCanonicalName(), "###### SETTING TOKEN: " + token.getToken());
         this.token = token;
     }
 
     public void setPreferences(final SharedPreferences prefs)
     {
         this.prefs = prefs;
+        this.token = new ApiToken().withToken(prefs.getString(PREF_API_KEY, ""));
+        this.username = prefs.getString(PREF_USERNAME, "");
+    }
+
+    protected void clearCredentials()
+    {
+        if (prefs != null)
+        {
+            prefs.edit()
+                    .putString(PREF_API_KEY, null)
+                    .putString(PREF_USERNAME, null)
+                    .commit();
+        }
     }
 
     protected void writeCredentials()
     {
         if (prefs != null)
         {
+            Log.d(getClass().getCanonicalName(), "###### WRITING CREDENTIALS TO PREFS: " + token.getToken() + " username: " + username);
             prefs.edit()
                     .putString(PREF_API_KEY, token.getToken())
                     .putString(PREF_USERNAME, username)
@@ -164,6 +181,10 @@ public class ApiHandler
             {
                 String credentials = String.format("%s:%s", username, token.getToken());
                 connection.setRequestProperty("Authorization", "Basic " + Base64.encodeToString(credentials.getBytes(), Base64.DEFAULT).trim());
+            }
+            else
+            {
+                this.username = args[0].second;
             }
             connection.connect();
             int response_code = connection.getResponseCode();

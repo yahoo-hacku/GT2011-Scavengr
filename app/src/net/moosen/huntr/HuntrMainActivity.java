@@ -104,6 +104,7 @@ public class HuntrMainActivity extends Activity
             if (api_key.isEmpty())
             {
                 // no api key, we need to send them to the login page.
+                Log.d(getClass().getCanonicalName(), "###### API KEY WAS EMPTY");
                 progress_state = PROGRESS_STATE.LOGIN;
             }
             else
@@ -114,6 +115,7 @@ public class HuntrMainActivity extends Activity
                     // ping server
                     try
                     {
+                        Log.d(getClass().getCanonicalName(), "###### PINGING");
                         ApiHandler.GetInstance().doAction(API_ACTION.PING);
                         progress_state = PROGRESS_STATE.HOME_TABS;
 
@@ -127,6 +129,7 @@ public class HuntrMainActivity extends Activity
                 else
                 {
                     // send them to the login page.
+                    Log.d(getClass().getCanonicalName(), "###### NO USERNAME");
                     progress_state = PROGRESS_STATE.LOGIN;
                 }
             }

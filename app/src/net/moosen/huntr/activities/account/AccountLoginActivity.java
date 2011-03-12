@@ -62,7 +62,7 @@ public class AccountLoginActivity extends Activity
                 try
                 {
                     ApiHandler.GetInstance().doAction(API_ACTION.LOGIN,
-                            new Pair<String, String>("username", m_username),
+                            new Pair<String, String>("name", m_username),
                             new Pair<String, String>("password", m_password));
                 }
                 catch (final AuthenticationException ex)

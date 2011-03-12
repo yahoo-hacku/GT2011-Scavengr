@@ -57,7 +57,7 @@ public class HomeTabsActivity extends TabActivity
         }
         catch (final AuthenticationException ex)
         {
-
+            //
         }
 
         return super.onOptionsItemSelected(item);
