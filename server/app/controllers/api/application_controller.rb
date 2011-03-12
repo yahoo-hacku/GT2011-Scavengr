@@ -26,7 +26,6 @@ class Api::ApplicationController < ActionController::Base
   private
 
   def return_object(object)
-    puts "#{object}"
     respond_to do |format| 
       format.json { render json: object }
       format.xml { render xml: object }
