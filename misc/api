@@ -9,7 +9,7 @@ shift
 ACTION=$1
 shift
 for i in $@; do
-    A="$A -d '$i'"
+    A="$A -d $i"
 done
 
 curl -X $VERB $A "$USER:$KEY@$HOST:3000/api/$ACTION"
