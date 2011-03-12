@@ -3,4 +3,5 @@
     <string name="app_name">Quest Huntr</string>
     <string name="account_login_title">Login To Your Account</string>
     <string name="account_create_title">Create Your Account</string>
+    <string name="home_tabs_title">Home</string>
 </resources>

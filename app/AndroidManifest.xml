@@ -3,7 +3,7 @@
       package="net.moosen.huntr"
       android:versionCode="1"
       android:versionName="1.0">
-    <application android:label="huntr" android:icon="@drawable/icon">
+    <application android:label="huntr" android:icon="@drawable/icon" android:debuggable="true">
         <!--<activity android:name=".activities.account.AccountLoginActivity"
                   android:label="@string/app_name">-->
         <activity android:name=".HuntrMainActivity" android:label="@string/app_name">
@@ -16,5 +16,9 @@
                   android:label="@string/account_create_title"/>
         <activity android:name=".activities.account.AccountLoginActivity"
                   android:label="@string/account_login_title"/>
+        <activity android:name=".activities.HomeTabsActivity"
+                  android:label="@string/home_tabs_title"/>
     </application>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 </manifest> 

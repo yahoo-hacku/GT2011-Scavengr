@@ -10,7 +10,11 @@ import android.util.Log;
 import android.widget.ProgressBar;
 import net.moosen.huntr.activities.HomeTabsActivity;
 import net.moosen.huntr.activities.account.AccountLoginActivity;
-import net.moosen.huntr.exceptions.AuthenticationException;
+import net.moosen.huntr.api.ApiHandler;
+import net.moosen.huntr.api.ApiHandler.API_ACTION;
+
+import static net.moosen.huntr.api.ApiHandler.PREF_API_KEY;
+import static net.moosen.huntr.api.ApiHandler.PREF_USERNAME;
 
 /**
  * TODO: Enter class description.
@@ -40,6 +44,7 @@ public class HuntrMainActivity extends Activity
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
 
+        ApiHandler.GetInstance().setPreferences(getPreferences(Context.MODE_PRIVATE));
         setContentView(R.layout.main);
         progress = (ProgressBar) findViewById(R.id.progress_main);
         final Intent login = new Intent(), home_tabs = new Intent();
@@ -91,8 +96,9 @@ public class HuntrMainActivity extends Activity
         }).start();
 
         SharedPreferences preferences = getPreferences(Context.MODE_PRIVATE);
-        final String api_key = preferences.getString("user.api_key", "");
-        final String username = preferences.getString("user.name", "");
+        final String api_key = preferences.getString(PREF_API_KEY, "");
+        final String username = preferences.getString(PREF_USERNAME, "");
+        Log.d(getClass().getCanonicalName(), "Key: " + api_key);
         try
         {
             if (api_key.isEmpty())
@@ -108,12 +114,13 @@ public class HuntrMainActivity extends Activity
                     // ping server
                     try
                     {
-                        ApiHandler.GetInstance().setCredentials(api_key, username);
+                        ApiHandler.GetInstance().doAction(API_ACTION.PING);
                         progress_state = PROGRESS_STATE.HOME_TABS;
 
                     }
-                    catch (final AuthenticationException ex)
+                    catch (final Exception ex)
                     {
+                        Log.d(getClass().getCanonicalName(), "Caught exception. Redirecting to login.");
                         progress_state = PROGRESS_STATE.LOGIN;
                     }
                 }
