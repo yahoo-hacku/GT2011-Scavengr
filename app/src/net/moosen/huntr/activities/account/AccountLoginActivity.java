@@ -1,6 +1,8 @@
 package net.moosen.huntr.activities.account;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -14,7 +16,6 @@ import net.moosen.huntr.R;
 import net.moosen.huntr.activities.HomeTabsActivity;
 import net.moosen.huntr.api.ApiHandler;
 import net.moosen.huntr.api.ApiHandler.API_ACTION;
-import net.moosen.huntr.exceptions.AuthenticationException;
 
 import static net.moosen.huntr.results.Results.ACCOUNT_CREATE_RESULT;
 
@@ -50,6 +51,17 @@ public class AccountLoginActivity extends Activity
         startActivityForResult(intent, ACCOUNT_CREATE_RESULT);
     }
 
+    protected void showErrorDialog(final String message)
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(message)
+               .setCancelable(false)
+               .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                   public void onClick(DialogInterface dialog, int id) { }
+               });
+        builder.create().show();
+    }
+
     protected void attachButtonListeners()
     {
         Button login = (Button) findViewById(R.id.l_login_button), create = (Button) findViewById(R.id.l_create_button);
@@ -58,25 +70,38 @@ public class AccountLoginActivity extends Activity
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(getClass().getCanonicalName(), "You tried to login.");
+                String error = null;
                 try
                 {
-                    ApiHandler.GetInstance().doAction(API_ACTION.LOGIN,
+                    Log.d(getClass().getCanonicalName(), "You tried to login.");
+
+                    if (m_username.isEmpty() || m_password.isEmpty())
+                    {
+                        error = "Username and Password fields must not be empty!";
+                    }
+                    else
+                    {
+                        ApiHandler.GetInstance().doAction(API_ACTION.LOGIN,
                             new Pair<String, String>("name", m_username),
                             new Pair<String, String>("password", m_password));
+                    }
                 }
-                catch (final AuthenticationException ex)
+                catch (final Exception ex)
                 {
-
+                    Log.d(getClass().getCanonicalName(), "CAUGHT EXCEPTION, DISPLAYING ALERT.");
+                    error = ex.getMessage();
                 }
-/*
+                finally
                 {
-                    ApiHandler.GetInstance().writeCredentials();
+                    if (error == null)
+                    {
+                        startActivity(home_tabs);
+                        finish();
+                    }
+                    else
+                        showErrorDialog(error);
                 }
-*/
 
-                startActivity(home_tabs);
-                finish();
             }
         });
 

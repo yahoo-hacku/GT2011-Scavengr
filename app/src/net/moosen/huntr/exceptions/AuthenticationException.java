@@ -1,5 +1,7 @@
 package net.moosen.huntr.exceptions;
 
+import android.util.Log;
+
 /**
  * TODO: Enter class description.
  */
@@ -14,6 +16,7 @@ public class AuthenticationException extends Exception {
     public AuthenticationException(final String error)
     {
         super(error);
+        Log.d(getClass().getCanonicalName(), "AUTHENTICATION EXCEPTION BEING THROWN.");
         this.error = error;
     }
 

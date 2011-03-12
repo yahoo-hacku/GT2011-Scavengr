@@ -6,6 +6,15 @@
     android:background="@drawable/bg"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <TextView
+        android:id="@+id/l_username_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="username:"
+        android:textSize="12sp"
+        android:layout_x="60px"
+        android:layout_y="80px"/>
+
     <EditText
         android:id="@+id/l_username"
         android:layout_width="200px"
@@ -16,13 +25,22 @@
         android:layout_x="60px"
         android:layout_y="100px"/>
 
+    <TextView
+        android:id="@+id/l_pw_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="password:"
+        android:textSize="12sp"
+        android:layout_x="60px"
+        android:layout_y="155px"/>
+
     <EditText
         android:id="@+id/l_password"
         android:layout_width="200px"
         android:layout_height="wrap_content"
         android:password="true"
         android:singleLine="true"
-        android:text="asdf"
+        android:text="as"
         android:textSize="18sp"
         android:layout_x="60px"
         android:layout_y="175px"/>
@@ -34,6 +52,14 @@
         android:text="Login"
         android:layout_x="110px"
         android:layout_y="275px"/>
+    <TextView
+        android:id="@+id/l_OR"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="OR"
+        android:textSize="20sp"
+        android:layout_x="145px"
+        android:layout_y="325px"/>
 
     <Button
         android:id="@+id/l_create_button"
@@ -41,7 +67,7 @@
         android:layout_height="50px"
         android:text="Create Your Account"
         android:layout_x="78px"
-        android:layout_y="345px"/>
+        android:layout_y="355px"/>
 
 
 </AbsoluteLayout>

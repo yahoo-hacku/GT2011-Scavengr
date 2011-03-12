@@ -9,7 +9,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import android.content.SharedPreferences;
-import android.text.GetChars;
 import android.util.Base64;
 import android.util.Log;
 import android.util.Pair;
@@ -54,24 +53,38 @@ public class ApiHandler
             }
         },
         REGISTER("register", "GET"){
-            public void handleResponse(final InputStream response)
+            public void handleResponse(final InputStream response) throws AuthenticationException
             {
-                Gson gson = new Gson();
                 Reader response_reader = new InputStreamReader(response);
-                ApiToken token = gson.fromJson(response_reader, ApiToken.class);
-                GetInstance().setToken(token);
-                GetInstance().writeCredentials();
+                ApiToken token = new Gson().fromJson(response_reader, ApiToken.class);
+                if (token.getToken() == null)
+                {
+                    throw new AuthenticationException("Username or Password was incorrect!");
+                }
+                else
+                {
+                    GetInstance().setToken(token);
+                    GetInstance().writeCredentials();
+                }
             }
         },
         LOGIN("login", "GET")
         {
-            public void handleResponse(final InputStream response)
+            public void handleResponse(final InputStream response) throws AuthenticationException
             {
-                Gson gson = new Gson();
                 Reader response_reader = new InputStreamReader(response);
-                ApiToken token = gson.fromJson(response_reader, ApiToken.class);
-                GetInstance().setToken(token);
-                GetInstance().writeCredentials();
+                ApiToken token = new Gson().fromJson(response_reader, ApiToken.class);
+                Log.d(getClass().getCanonicalName(), "HANDLING LOGIN: " + token.getToken());
+                if (token.getToken() == null)
+                {
+                    Log.d(getClass().getCanonicalName(), "Login failed.");
+                    throw new AuthenticationException("Username or Password was incorrect!");
+                }
+                else
+                {
+                    GetInstance().setToken(token);
+                    GetInstance().writeCredentials();
+                }
             }
         },
         LOGOUT("logout", "GET")
@@ -190,18 +203,25 @@ public class ApiHandler
             int response_code = connection.getResponseCode();
             if (response_code != HttpURLConnection.HTTP_UNAUTHORIZED)
             {
-                // YOU DUN GOOFED
+                AuthenticationException exception = null;
                 try
                 {
                     action.handleResponse(connection.getInputStream());
                 }
                 catch (final AuthenticationException ex)
                 {
-                    throw new AuthenticationException(ex.getMessage());
+                    Log.d(getClass().getCanonicalName(), "ACTION RESULTED IN AN AUTH EXCEPTION. THROWING: " + ex.getMessage());
+                    exception = new AuthenticationException(ex.getMessage());
                 }
-
+                finally
+                {
+                    connection.disconnect();
+                }
+                if (exception != null)
+                {
+                    throw exception;
+                }
             }
-            connection.disconnect();
         }
         catch (final MalformedURLException ex)
         {
@@ -213,10 +233,6 @@ public class ApiHandler
             // connection could not be made.
             Log.d(getClass().getCanonicalName(), "IO Exception: " + ex.getMessage());
             ex.printStackTrace();
-        }
-        catch (final Exception ex)
-        {
-
         }
     }
 
