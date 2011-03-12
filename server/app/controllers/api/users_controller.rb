@@ -3,8 +3,9 @@ class Api::UsersController < Api::ApplicationController
   skip_before_filter :require_user, only: [:login, :register]
 
   def login
-    user = User.find_by_name(params[:name])
-    if user and user.pass == params[:password]
+    cred = params[:user] || {}
+    user = User.find_by_name(cred[:name])
+    if user and user.pass == cred[:password]
       send_token user
     else
       respond_with error: 'Invalid Username or Password'
