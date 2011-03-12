@@ -2,6 +2,8 @@ class UserStep < ActiveRecord::Base
   belongs_to :user_quest
   belongs_to :step
 
+  json_include :step
+
   validate :is_valid_step
   validates_uniqueness_of :step_id, scope: 'user_quest_id', message: "already given for this quest"
 
