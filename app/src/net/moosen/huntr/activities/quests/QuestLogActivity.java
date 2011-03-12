@@ -1,5 +1,6 @@
 package net.moosen.huntr.activities.quests;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -16,7 +17,7 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TwoLineListItem;
 import net.moosen.huntr.R;
-import net.moosen.huntr.activities.quests.steps.QuestStep;
+import net.moosen.huntr.activities.quests.steps.QuestStepDto;
 import net.moosen.huntr.api.ApiHandler;
 import net.moosen.huntr.api.ApiHandler.API_ACTION;
 import net.moosen.huntr.exceptions.AuthenticationException;
@@ -26,27 +27,25 @@ import net.moosen.huntr.exceptions.AuthenticationException;
  */
 public class QuestLogActivity extends Activity
 {
-    private ListView list_view;
     @Override
     public void onCreate(final Bundle bundle)
     {
         super.onCreate(bundle);
         setContentView(R.layout.quest_log);
 
-        list_view = (ListView) findViewById(R.id.quest_log);
+        ListView list_view = (ListView) findViewById(R.id.quest_log);
 
         try
         {
-            List<Quest> quests = ApiHandler.GetInstance().doAction(API_ACTION.QUESTS);
-            for (Quest quest : quests)
+            ArrayList<QuestDto> quests = ApiHandler.GetInstance().doAction(API_ACTION.QUESTS);
+            for (QuestDto quest : quests)
             {
-                quest.setStepList(ApiHandler.GetInstance().<List<QuestStep>>doAction(API_ACTION.STEPS,
+                quest.setSteps(ApiHandler.GetInstance().<ArrayList<QuestStepDto>>doAction(API_ACTION.STEPS,
                         new Pair<String, String>("id", quest.getId().toString())));
             }
             QuestAdapter adapter = new QuestAdapter(quests);
             list_view.setAdapter(adapter);
             list_view.setOnItemClickListener(adapter);
-
         }
         catch (final AuthenticationException ex)
         {
@@ -54,20 +53,21 @@ public class QuestLogActivity extends Activity
         }
     }
 
-    private void launchQuest(Quest quest) {
+    private void launchQuest(QuestDto quest) {
         Intent next = new Intent();
         next.setClass(this, Quest.class);
         next.putExtra("name", quest.getName());
         next.putExtra("description", quest.getDescription());
+        next.putExtra("steps", quest.getSteps());
         startActivity(next);
     }
 
     class QuestAdapter extends BaseAdapter implements AdapterView.OnItemClickListener {
 
-        private final List<Quest> quests;
+        private final List<QuestDto> quests;
         private final LayoutInflater inflater;
 
-        public QuestAdapter(List<Quest> quests) {
+        public QuestAdapter(List<QuestDto> quests) {
             this.quests = quests;
             this.inflater = (LayoutInflater) getSystemService(
                     Context.LAYOUT_INFLATER_SERVICE);
@@ -100,7 +100,7 @@ public class QuestLogActivity extends Activity
             return item;
         }
 
-        private void bindView(TwoLineListItem view, Quest quest) {
+        private void bindView(TwoLineListItem view, QuestDto quest) {
             view.getText1().setText(quest.getName());
             view.getText2().setText(quest.getDescription());
         }
@@ -108,7 +108,5 @@ public class QuestLogActivity extends Activity
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             launchQuest(quests.get(position));
         }
-
-
     }
 }
