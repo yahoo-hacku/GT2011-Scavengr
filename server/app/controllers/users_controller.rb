@@ -4,6 +4,15 @@ class UsersController < ApplicationController
   def login
   end
   
+  def js_api
+    token = AuthToken.create(user: @user, token: UUIDTools::UUID.timestamp_create.to_s)
+    token.save
+    respond_to do |format|
+      object = {user: @user.name, key: token.token}
+      format.json { render json: object }
+    end
+  end
+  
   def do_login
     @user = User.find_by_name(params[:name])
     if @user and @user.pass == params[:password]
