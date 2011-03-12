@@ -9,8 +9,7 @@ class Api::UserQuestsController < Api::ApplicationController
 
   def setup_api
     @active_params = params[:quest]
-    case params[:action]
-    when 'create'
+    if params[:action] == 'create'
       @active_object = @user.user_quests.build
     else
       @active_object = @user.user_quests.find(params[:id])

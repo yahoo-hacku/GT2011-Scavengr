@@ -10,7 +10,11 @@ class Api::StepsController < Api::ApplicationController
 
   def setup_api
     @quest = @user.quests.find(params[:quest_id])
-    @active_object = params[:id] ? @quest.find(params[:id]) : @quest.steps.build
     @active_params = params[:step]
+    if params[:action] == 'create'
+      @active_object = @quest.steps.build
+    else
+      @active_object = @quest.steps.find(params[:id])
+    end
   end
 end
