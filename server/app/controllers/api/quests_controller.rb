@@ -1,27 +1,18 @@
-require 'uuidtools'
+class Api::QuestsController < Api::ApplicationController
+  before_filter :setup_api, :except => [ :index ]
 
-module Api
-  class QuestsController < ApiController
-    def index
-      respond_with @user.quests
-    end
-    def create
-      respond_with ""
-    end
-    def show
-      respond_with @user.quests.find(params[:id])
-    end
-    def update
-      respond_with ""
-    end
-    def destroy
-      quest = @user.quests.find(params[:id])
-      if quest 
-        quest.destroy
-        respond_with ""
-      else
-        respond_with error: "No Such Quest"
-      end
+  def index
+    respond_with @user.quests
+  end
+
+  private
+
+  def setup_api
+    @active_params = params[:quest]
+    if params[:action] == 'create'
+      @active_object = @user.quests.build
+    else
+      @active_object = @user.quests.find(params[:id]) 
     end
   end
 end

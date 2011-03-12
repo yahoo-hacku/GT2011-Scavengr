@@ -13,6 +13,9 @@ Huntr::Application.routes.draw do
     get "register" => 'users#register'
     get "ping" => 'users#ping'
     resources :user_quests
+    resources :quests do
+      resources :steps
+    end
   end
 
   # root :to => "welcome#index"
