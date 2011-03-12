@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Pair;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -17,6 +19,7 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TwoLineListItem;
 import net.moosen.huntr.R;
+import net.moosen.huntr.activities.account.AccountLoginActivity;
 import net.moosen.huntr.activities.quests.dto.QuestDto;
 import net.moosen.huntr.activities.quests.dto.UserQuestDto;
 import net.moosen.huntr.activities.quests.dto.UserQuestStepDto;
@@ -167,5 +170,33 @@ public class QuestLogActivity extends Activity
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             launchUserQuest(quests.get(position));
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        try
+        {
+            switch (item.getItemId())
+            {
+                case R.id.menu_logout:
+                    ApiHandler.GetInstance().doAction(API_ACTION.LOGOUT);
+                    startActivity(new Intent(this, AccountLoginActivity.class));
+                    finish();
+                    break;
+            }
+        }
+        catch (final AuthenticationException ex)
+        {
+            //
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

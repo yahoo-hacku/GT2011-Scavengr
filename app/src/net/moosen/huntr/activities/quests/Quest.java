@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -19,8 +21,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TwoLineListItem;
 import net.moosen.huntr.R;
+import net.moosen.huntr.activities.account.AccountLoginActivity;
 import net.moosen.huntr.activities.quests.dto.UserQuestDto;
 import net.moosen.huntr.activities.quests.dto.UserQuestStepDto;
+import net.moosen.huntr.api.ApiHandler;
+import net.moosen.huntr.api.ApiHandler.API_ACTION;
+import net.moosen.huntr.exceptions.AuthenticationException;
 
 /**
  * {"active":true,
@@ -60,7 +66,7 @@ public class Quest extends Activity
             quest.getSteps().get(current_sequence - 1).setCurrent(false);
             quest.getSteps().get(current_sequence - 1).complete();
         }
-        else if (current_sequence == 0)
+        else if (current_sequence == 0 && quest.getSteps().size() > 0)
         {
             quest.getSteps().get(current_sequence).makeCurrent();
         }
@@ -73,6 +79,7 @@ public class Quest extends Activity
             next.setClass(this, QuestStep.class);
             next.putExtra("step", step);
             next.putExtra("quest", quest);
+            Log.d(getClass().getCanonicalName(), "----------Posting step with sequence; " + current_sequence);
             next.putExtra("current_sequence", current_sequence);
             // set the rest of the intent data.
             startActivity(next);
@@ -137,11 +144,40 @@ public class Quest extends Activity
 
         private void bindView(TwoLineListItem view, UserQuestStepDto quest) {
             view.getText1().setText(quest.getStep().getSeq().toString());
-            view.getText2().setText(quest.getStep().getClue());
+            view.getText2().setText(quest.isComplete()  ? quest.getStep().getClue() : "---");
         }
 
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             launchQuestStep(steps.get(position));
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        try
+        {
+            switch (item.getItemId())
+            {
+                case R.id.menu_logout:
+                    ApiHandler.GetInstance().doAction(API_ACTION.LOGOUT);
+                    startActivity(new Intent(this, AccountLoginActivity.class));
+                    finish();
+                    break;
+            }
+        }
+        catch (final AuthenticationException ex)
+        {
+            //
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

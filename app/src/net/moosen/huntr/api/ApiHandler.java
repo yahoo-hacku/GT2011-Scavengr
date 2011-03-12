@@ -32,7 +32,9 @@ public class ApiHandler
 
     public static ApiHandler GetInstance() { return s_instance; }
 
-    public static final String WEB_HOST = "143.215.118.119";
+    //public static final String WEB_HOST = "143.215.118.119";
+
+    public static final String WEB_HOST = "128.61.120.161";
 
     public static final Integer WEB_PORT = 3000;
 

@@ -5,11 +5,18 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import net.moosen.huntr.R;
+import net.moosen.huntr.activities.account.AccountLoginActivity;
 import net.moosen.huntr.activities.quests.dto.UserQuestDto;
 import net.moosen.huntr.activities.quests.dto.UserQuestStepDto;
+import net.moosen.huntr.api.ApiHandler;
+import net.moosen.huntr.api.ApiHandler.API_ACTION;
+import net.moosen.huntr.exceptions.AuthenticationException;
 
 /**
  * {"clue":null,
@@ -38,7 +45,7 @@ public class QuestStep extends Activity {
         setContentView(R.layout.quest_step);
         quest = (UserQuestDto) getIntent().getSerializableExtra("quest");
         step = (UserQuestStepDto) getIntent().getSerializableExtra("step");
-        current_sequence = getIntent().getIntExtra("seq", 0);
+        current_sequence = getIntent().getIntExtra("current_sequence", 0);
 
         ((TextView) findViewById(R.id.step_clue)).setText("\"" + step.getStep().getClue() + "\"");
         ((TextView) findViewById(R.id.step_qname)).setText("Quest: " + quest.getQuest().getName());
@@ -57,7 +64,9 @@ public class QuestStep extends Activity {
                     back.putExtra("quest", quest);
                     back.putExtra("step", step);
                     current_sequence++;
+                    Log.d(getClass().getCanonicalName(), "------------------------Posting sequence: " + current_sequence);
                     back.putExtra("current_sequence", current_sequence);
+                    //showErrorDialog("Yes! You are!");
                     startActivity(back);
                     finish();
                 }
@@ -79,5 +88,33 @@ public class QuestStep extends Activity {
                    public void onClick(DialogInterface dialog, int id) { }
                });
         builder.create().show();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        try
+        {
+            switch (item.getItemId())
+            {
+                case R.id.menu_logout:
+                    ApiHandler.GetInstance().doAction(API_ACTION.LOGOUT);
+                    startActivity(new Intent(this, AccountLoginActivity.class));
+                    finish();
+                    break;
+            }
+        }
+        catch (final AuthenticationException ex)
+        {
+            //
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
