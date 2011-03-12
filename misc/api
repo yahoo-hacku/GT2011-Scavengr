@@ -1,0 +1,16 @@
+#! /bin/bash
+
+USER=ben
+KEY=4a4f2e6a-4c40-11e0-93ce-002241fffe53
+HOST=localhost
+
+VERB=$1
+shift
+ACTION=$1
+shift
+for i in $@; do
+    A="$A -d '$i'"
+done
+
+curl -X $VERB $A "$USER:$KEY@$HOST:3000/api/$ACTION"
+echo
