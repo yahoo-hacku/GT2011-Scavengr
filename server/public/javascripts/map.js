@@ -22,8 +22,7 @@ QUEST=1;
 					title: step.seq + ': ' + step.clue
 				});
 				
-				GEvent.addListener(marker, "dragend", function() {
-					point = marker.getLatLng();
+				GEvent.addListener(marker, "dragend", function(point) {
 					$.ajax({
 						url: "/api/quests/" + QUEST + "/steps/" + step.id,
 						type: 'PUT',
