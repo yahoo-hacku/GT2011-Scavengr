@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  skip_before_filter :require_user, only: [:login, :do_login, :new, :create]
+  skip_before_filter :require_user, only: [:login, :do_login, :register]
   
   def login
   end
