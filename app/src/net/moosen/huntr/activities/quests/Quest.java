@@ -1,13 +1,15 @@
 package net.moosen.huntr.activities.quests;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +19,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TwoLineListItem;
 import net.moosen.huntr.R;
-import net.moosen.huntr.activities.quests.dto.QuestStepDto;
+import net.moosen.huntr.activities.quests.dto.UserQuestDto;
+import net.moosen.huntr.activities.quests.dto.UserQuestStepDto;
 
 /**
  * {"active":true,
@@ -32,39 +35,74 @@ import net.moosen.huntr.activities.quests.dto.QuestStepDto;
  */
 public class Quest extends Activity
 {
+    private Integer current_sequence = 0;
+    private UserQuestDto quest;
+
     @Override
     @SuppressWarnings({"unchecked"})
     public void onCreate(final Bundle bundle)
     {
         super.onCreate(bundle);
         setContentView(R.layout.quest);
-        ArrayList<QuestStepDto> step_dtos = (ArrayList<QuestStepDto>) getIntent().getSerializableExtra("steps");
-        QuestStepAdapter adapter = new QuestStepAdapter(step_dtos);
+        this.quest = (UserQuestDto) getIntent().getSerializableExtra("quest");
+        current_sequence = getIntent().getIntExtra("current_sequence", -1);
+
+        QuestStepAdapter adapter = new QuestStepAdapter(quest.getSteps());
         ListView steps = (ListView) findViewById(R.id.quest_steps);
         steps.setAdapter(adapter);
         steps.setOnItemClickListener(adapter);
-        final String desc = getIntent().getStringExtra("description");
-        final String name = getIntent().getStringExtra("name");
-        ((TextView) findViewById(R.id.quest_name)).setText(name);
-        ((TextView) findViewById(R.id.quest_description)).setText(desc);
-        // TODO: fill stuff from intent
+        ((TextView) findViewById(R.id.quest_name)).setText("Quest Name: " + quest.getQuest().getName());
+        ((TextView) findViewById(R.id.quest_description)).setText("Quest Description: " + quest.getQuest().getDescription());
+        Log.d(getClass().getCanonicalName(), "Current Sequence: " + current_sequence);
+        if (current_sequence > 0 && quest.getSteps().size() - 1 >= current_sequence)
+        {
+            quest.getSteps().get(current_sequence).makeCurrent();
+            quest.getSteps().get(current_sequence - 1).setCurrent(false);
+            quest.getSteps().get(current_sequence - 1).complete();
+        }
+        else if (current_sequence == 0)
+        {
+            quest.getSteps().get(current_sequence).makeCurrent();
+        }
     }
 
-    private void launchQuestStep(QuestStepDto step) {
-        Intent next = new Intent();
-        next.setClass(this, QuestStep.class);
-        next.putExtra("seq", step.getSeq());
-        next.putExtra("clue", step.getClue());
-        // set the rest of the intent data.
-        startActivity(next);
+    private void launchQuestStep(UserQuestStepDto step) {
+        if (step.isCurrent() || step.isComplete())
+        {
+            Intent next = new Intent();
+            next.setClass(this, QuestStep.class);
+            next.putExtra("step", step);
+            next.putExtra("quest", quest);
+            next.putExtra("current_sequence", current_sequence);
+            // set the rest of the intent data.
+            startActivity(next);
+        }
+        else
+        {
+            // show error
+            showErrorDialog("You must complete earlier quest steps before attempting this one!");
+        }
+
+
+    }
+
+    protected void showErrorDialog(final String message)
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(message)
+               .setCancelable(false)
+               .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                   public void onClick(DialogInterface dialog, int id) { }
+               });
+        builder.create().show();
     }
 
     class QuestStepAdapter extends BaseAdapter implements AdapterView.OnItemClickListener {
 
-        private final List<QuestStepDto> steps;
+        private final List<UserQuestStepDto> steps;
         private final LayoutInflater inflater;
 
-        public QuestStepAdapter(List<QuestStepDto> steps) {
+        public QuestStepAdapter(List<UserQuestStepDto> steps) {
             this.steps = steps;
             this.inflater = (LayoutInflater) getSystemService(
                     Context.LAYOUT_INFLATER_SERVICE);
@@ -97,9 +135,9 @@ public class Quest extends Activity
             return item;
         }
 
-        private void bindView(TwoLineListItem view, QuestStepDto quest) {
-            view.getText1().setText(quest.getSeq().toString());
-            view.getText2().setText(quest.getClue());
+        private void bindView(TwoLineListItem view, UserQuestStepDto quest) {
+            view.getText1().setText(quest.getStep().getSeq().toString());
+            view.getText2().setText(quest.getStep().getClue());
         }
 
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

@@ -1,17 +1,32 @@
 package net.moosen.huntr.activities.quests.dto;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * TODO: Enter class description.
  */
 public class UserQuestDto implements Serializable
 {
-/*    private String started, created_at;*/
+    private QuestDto quest;
+
+    private ArrayList<UserQuestStepDto> steps;
+
+    private Integer quest_id;
+
+    public Integer getQuest_id() {
+        return quest_id;
+    }
+
+    public void setQuest_id(Integer quest_id) {
+        this.quest_id = quest_id;
+    }
+
+    private String created_at, start;
 
     public UserQuestDto() { }
 
-   /* public String getCreated_at() {
+    public String getCreated_at() {
         return created_at;
     }
 
@@ -19,19 +34,27 @@ public class UserQuestDto implements Serializable
         this.created_at = created_at;
     }
 
-    public String getStarted() {
-        return started;
+    public QuestDto getQuest() {
+        return quest;
     }
 
-    public void setStarted(String started) {
-        this.started = started;
+    public void setQuest(QuestDto quest) {
+        this.quest = quest;
     }
 
-    public QuestDto getRealQuest() {
-        return null;
+    public String getStart() {
+        return start;
     }
 
-    public void setRealQuest(QuestDto real_quest) {
-        *//*this.real_quest = real_quest;*//*
-    }*/
+    public void setStart(String start) {
+        this.start = start;
+    }
+
+    public ArrayList<UserQuestStepDto> getSteps() {
+        return steps;
+    }
+
+    public void setSteps(ArrayList<UserQuestStepDto> steps) {
+        this.steps = steps;
+    }
 }

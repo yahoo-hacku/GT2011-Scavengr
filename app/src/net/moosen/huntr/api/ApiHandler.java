@@ -19,6 +19,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import net.moosen.huntr.activities.quests.dto.QuestDto;
 import net.moosen.huntr.activities.quests.dto.QuestStepDto;
+import net.moosen.huntr.activities.quests.dto.UserQuestDto;
+import net.moosen.huntr.activities.quests.dto.UserQuestStepDto;
 import net.moosen.huntr.exceptions.AuthenticationException;
 
 /**
@@ -32,7 +34,7 @@ public class ApiHandler
 
     public static final String WEB_HOST = "143.215.118.119";
 
-    public static final Integer WEB_PORT = 3001;
+    public static final Integer WEB_PORT = 3000;
 
     public static final String PREF_API_KEY = "user.api_key";
 
@@ -117,6 +119,19 @@ public class ApiHandler
                 return (T) new ArrayList<QuestDto>(quest_col);
             }
         },
+        USER_QUESTS("user_quests", "GET")
+        {
+            @SuppressWarnings({"unchecked"})
+            public <T> T handleResponse(final InputStream response)
+            {
+                Reader response_reader = new InputStreamReader(response);
+                Gson gson = new Gson();
+                Type collectionType = new TypeToken<Collection<UserQuestDto>>(){}.getType();
+                Collection<UserQuestDto> quest_col = gson.fromJson(response_reader, collectionType);
+
+                return (T) new ArrayList<UserQuestDto>(quest_col);
+            }
+        },
         STEPS("steps", "GET")
         {
             @SuppressWarnings({"unchecked"})
@@ -127,6 +142,19 @@ public class ApiHandler
                 Type collectionType = new TypeToken<Collection<QuestStepDto>>(){}.getType();
                 Collection<QuestStepDto> quest_col = gson.fromJson(response_reader, collectionType);
                 return (T) new ArrayList<QuestStepDto>(quest_col);
+            }
+        },
+        USER_STEPS("users_quests", "GET")
+        {
+            @SuppressWarnings({"unchecked"})
+            public <T> T handleResponse(final InputStream response)
+            {
+                Reader response_reader = new InputStreamReader(response);
+                Gson gson = new Gson();
+                Type collectionType = new TypeToken<Collection<UserQuestStepDto>>(){}.getType();
+                Collection<UserQuestStepDto> quest_col = gson.fromJson(response_reader, collectionType);
+
+                return (T) new ArrayList<UserQuestStepDto>(quest_col);
             }
         };
 
@@ -210,6 +238,10 @@ public class ApiHandler
             {
                 action_str = String.format("quests/%d/steps", Integer.parseInt(args[0].second));
             }
+            else if (action.equals(API_ACTION.USER_STEPS))
+            {
+                action_str = String.format("user_quests/%d/user_steps", Integer.parseInt(args[0].second));
+            }
             else
             {
                 action_str = action.getActionString();
@@ -256,6 +288,7 @@ public class ApiHandler
                 InputStream response = connection.getInputStream();
                 try
                 {
+
 
                     return_value = (T) action.handleResponse(response);
 
