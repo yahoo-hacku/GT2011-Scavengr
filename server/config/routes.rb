@@ -13,7 +13,7 @@ Huntr::Application.routes.draw do
     get "register" => 'users#register'
     get "ping" => 'users#ping'
     resources :user_quests do
-      resources :user_steps
+      resources :user_steps, as: 'steps'
     end
     resources :quests do
       resources :steps
