@@ -1,7 +1,7 @@
 require 'bcrypt'
 
 class User < ActiveRecord::Base
-  has_many :quests
+  has_many :quests, foreign_key: "created_by_id"
   has_many :user_quests
   has_many :comments
   

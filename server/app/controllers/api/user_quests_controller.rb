@@ -1,27 +1,19 @@
-require 'uuidtools'
-
 module Api
   class UserQuestsController < ApiController
     def index
       respond_with @user.user_quests
     end
     def create
-      respond_with ""
+      create_object @user.user_quests.create(params[:quest]), 'User Quest'
     end
     def show
-      respond_with @user.user_quests.find(params[:id])
+      show_object @user.user_quests.find(params[:id]), 'User Quest'
     end
     def update
-      respond_with ""
+      update_object @user.user_quests.find(params[:id]), 'User Quest', params[:quest]
     end
     def destroy
-      quest = @user.user_quests.find(params[:id])
-      if quest 
-        quest.destroy
-        respond_with ""
-      else
-        respond_with error: "No Such Quest"
-      end
+      delete_object @user.user_quests.find(params[:id]), 'User Quest'
     end
   end
 end

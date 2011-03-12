@@ -6,22 +6,16 @@ module Api
       respond_with @user.quests
     end
     def create
-      respond_with ""
+      create_object @user.quests.create(params[:quest]), 'quest'
     end
     def show
-      respond_with @user.quests.find(params[:id])
+      show_object @user.quests.find(params[:id]), 'quest'
     end
     def update
-      respond_with ""
+      update_object @user.quests.find(params[:id]), 'quest', params[:quest]
     end
     def destroy
-      quest = @user.quests.find(params[:id])
-      if quest 
-        quest.destroy
-        respond_with ""
-      else
-        respond_with error: "No Such Quest"
-      end
+      delete_object @user.quests.find(params[:id]), 'quest'
     end
   end
 end
