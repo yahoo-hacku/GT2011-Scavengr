@@ -1,21 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-
 <AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
-    <TextView
-        android:id="@+id/step_num"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_x="80px"
-        android:layout_y="72px"/>
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@drawable/bg">
+    <LinearLayout
+
+            android:orientation="horizontal"
+
+            android:layout_width="fill_parent"
+
+            android:layout_height="wrap_content" >
 
     <TextView
         android:id="@+id/step_clue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_x="80px"
-        android:layout_y="92px"/>
+        android:textSize="24sp"
+        android:layout_y="42px"
+        android:layout_gravity="center_vertical"/>
+    </LinearLayout>
 
+    <TextView
+        android:id="@+id/step_qname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_x="120px"
+        android:layout_y="232px"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/step_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_x="120px"
+        android:layout_y="252px"
+        android:gravity="center"/>
+
+    <Button
+        android:id="@+id/check_step_btn"
+        android:layout_width="200px"
+        android:layout_height="100px"
+        android:text="Am I There?"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:layout_x="60px"
+        android:layout_y="282px"/>
 </AbsoluteLayout>
+<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@drawable/bg">
+    <TextView
+        android:id="@+id/step_clue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"/>
+
+    <TextView
+        android:id="@+id/step_qname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:id="@+id/step_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"/>
+
+
+
+</LinearLayout>
+       -->

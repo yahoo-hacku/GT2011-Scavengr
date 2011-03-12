@@ -3,6 +3,8 @@
 USER=ben
 KEY=710f39e0-4cb9-11e0-b082-002241fffe53
 HOST=localhost
+#HOST=128.61.120.161
+HOST=143.215.118.119
 
 VERB=$1
 shift

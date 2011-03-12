@@ -25,6 +25,14 @@
                   android:label="@string/home_tabs_title"/>
         <activity android:name=".activities.quests.QuestAddActivity"
                   android:label="@string/home_tabs_title"/>
+        <activity android:name=".activities.quests.Quest"
+                  android:label="@string/home_tabs_title">
+           <intent-filter>
+               <action android:name="net.moosen.huntr.events.CHANGE_CURRENT_QUEST_STEP_EVENT"/>
+           </intent-filter>
+        </activity>
+        <activity android:name=".activities.quests.QuestStep"
+                  android:label="@string/home_tabs_title"/>
     </application>
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />

@@ -1,12 +1,5 @@
 package net.moosen.huntr;
 
-import static net.moosen.huntr.api.ApiHandler.PREF_API_KEY;
-import static net.moosen.huntr.api.ApiHandler.PREF_USERNAME;
-import net.moosen.huntr.activities.HomeTabsActivity;
-import net.moosen.huntr.activities.account.AccountLoginActivity;
-import net.moosen.huntr.api.ApiHandler;
-import net.moosen.huntr.api.ApiHandler.API_ACTION;
-import android.R;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +9,13 @@ import android.os.Handler;
 import android.util.Log;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+import net.moosen.huntr.activities.HomeTabsActivity;
+import net.moosen.huntr.activities.account.AccountLoginActivity;
+import net.moosen.huntr.api.ApiHandler;
+import net.moosen.huntr.api.ApiHandler.API_ACTION;
+
+import static net.moosen.huntr.api.ApiHandler.PREF_API_KEY;
+import static net.moosen.huntr.api.ApiHandler.PREF_USERNAME;
 
 /**
  * TODO: Enter class description.
@@ -103,6 +103,7 @@ public class HuntrMainActivity extends Activity {
 		setContentView(R.layout.main);
 		progress = (ProgressBar) findViewById(R.id.progress_main);
 		progress.setProgress(50);
+        check_login();
 
 	}
 }
