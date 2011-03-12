@@ -98,7 +98,7 @@ public class Quest extends Activity
         }
 
         private void bindView(TwoLineListItem view, QuestStepDto quest) {
-            view.getText1().setText(quest.getSeq());
+            view.getText1().setText(quest.getSeq().toString());
             view.getText2().setText(quest.getClue());
         }
 

@@ -1,8 +1,9 @@
 #! /bin/bash
 
-USER=ben
-KEY=4a4f2e6a-4c40-11e0-93ce-002241fffe53
-HOST=localhost
+USER=alex
+KEY=99bb1eca-4c8e-11e0-8525-90e6ba4b8b9a
+#HOST=128.61.120.161
+HOST=143.215.118.119
 
 VERB=$1
 shift

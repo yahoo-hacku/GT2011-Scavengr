@@ -38,6 +38,7 @@ public class QuestLogActivity extends Activity
 
         try
         {
+            //ArrayList<QuestDto> quests = ApiHandler.GetInstance().doAction(API_ACTION.USER_QUESTS);
             ArrayList<QuestDto> quests = ApiHandler.GetInstance().doAction(API_ACTION.QUESTS);
             for (QuestDto quest : quests)
             {

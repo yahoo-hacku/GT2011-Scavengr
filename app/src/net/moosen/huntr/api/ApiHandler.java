@@ -17,8 +17,8 @@ import android.util.Log;
 import android.util.Pair;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import net.moosen.huntr.activities.quests.Quest;
-import net.moosen.huntr.activities.quests.QuestStep;
+import net.moosen.huntr.activities.quests.dto.QuestDto;
+import net.moosen.huntr.activities.quests.dto.QuestStepDto;
 import net.moosen.huntr.exceptions.AuthenticationException;
 
 /**
@@ -32,7 +32,7 @@ public class ApiHandler
 
     public static final String WEB_HOST = "143.215.118.119";
 
-    public static final Integer WEB_PORT = 3000;
+    public static final Integer WEB_PORT = 3001;
 
     public static final String PREF_API_KEY = "user.api_key";
 
@@ -112,9 +112,9 @@ public class ApiHandler
             {
                 Reader response_reader = new InputStreamReader(response);
                 Gson gson = new Gson();
-                Type collectionType = new TypeToken<Collection<Quest>>(){}.getType();
-                Collection<Quest> quest_col = gson.fromJson(response_reader, collectionType);
-                return (T) new ArrayList<Quest>(quest_col);
+                Type collectionType = new TypeToken<Collection<QuestDto>>(){}.getType();
+                Collection<QuestDto> quest_col = gson.fromJson(response_reader, collectionType);
+                return (T) new ArrayList<QuestDto>(quest_col);
             }
         },
         STEPS("steps", "GET")
@@ -124,9 +124,9 @@ public class ApiHandler
             {
                 Reader response_reader = new InputStreamReader(response);
                 Gson gson = new Gson();
-                Type collectionType = new TypeToken<Collection<QuestStep>>(){}.getType();
-                Collection<QuestStep> quest_col = gson.fromJson(response_reader, collectionType);
-                return (T) new ArrayList<QuestStep>(quest_col);
+                Type collectionType = new TypeToken<Collection<QuestStepDto>>(){}.getType();
+                Collection<QuestStepDto> quest_col = gson.fromJson(response_reader, collectionType);
+                return (T) new ArrayList<QuestStepDto>(quest_col);
             }
         };
 
@@ -216,20 +216,26 @@ public class ApiHandler
             }
             if (action.getHttpVerb().equals("GET"))
             {
+                url_string += action_str;
                 for (int i = 0; i < args.length; i++)
                 {
                     String separator = (i == 0 ? "?" : "&");
                     url_string += String.format("%s%s=%s", separator, args[i].first, args[i].second);
                 }
             }
+            else
+            {
+                url_string += action_str;
+            }
 
-            url_string += action_str;
+
 
             Log.d(getClass().getCanonicalName(), "##############URL STRING: " + url_string);
 
             URL url = new URL(url_string);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.addRequestProperty("Accept", "application/json");
+            connection.setRequestProperty("Connection", "close");
             connection.setRequestMethod(action.getHttpVerb());
 
             if (!action.equals(API_ACTION.LOGIN))
@@ -241,29 +247,34 @@ public class ApiHandler
             {
                 this.username = args[0].second;
             }
+
             connection.connect();
             int response_code = connection.getResponseCode();
             if (response_code != HttpURLConnection.HTTP_UNAUTHORIZED)
             {
                 AuthenticationException exception = null;
+                InputStream response = connection.getInputStream();
                 try
                 {
-                    return_value = action.handleResponse(connection.getInputStream());
+
+                    return_value = (T) action.handleResponse(response);
+
                 }
                 catch (final AuthenticationException ex)
                 {
                     Log.d(getClass().getCanonicalName(), "ACTION RESULTED IN AN AUTH EXCEPTION. THROWING: " + ex.getMessage());
                     exception = new AuthenticationException(ex.getMessage());
                 }
-                finally
+                /*finally
                 {
-                    connection.disconnect();
-                }
+                    response.close();
+                }*/
                 if (exception != null)
                 {
                     throw exception;
                 }
             }
+            connection.disconnect();
         }
         catch (final MalformedURLException ex)
         {
