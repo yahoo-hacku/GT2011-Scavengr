@@ -1,0 +1,43 @@
+#! /usr/bin/env ruby
+
+require 'socket'
+
+if ARGV.size != 2
+    $stderr.puts "Usage #{$_} <listen port> <server>:<port>"
+    exit -1
+end
+
+
+server = TCPServer.open ARGV[0]
+
+
+remote = ARGV[1].split(':')
+host = remote[0]
+port = remote[1].to_i
+
+
+loop do
+  proxy = server.accept
+  client = TCPSocket.open host, port
+
+  Thread.new do 
+    begin
+      while a = proxy.getc
+          $stdout << a
+          client << a
+      end
+    rescue IOError
+    end
+    client.close
+  end
+  
+  begin
+    while a = client.getc
+        $stdout << a
+        proxy << a
+    end
+  rescue IOError
+  end
+  proxy.close
+  puts
+end
