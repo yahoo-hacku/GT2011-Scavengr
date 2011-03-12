@@ -82,8 +82,8 @@ public class AccountLoginActivity extends Activity
                     else
                     {
                         ApiHandler.GetInstance().doAction(API_ACTION.LOGIN,
-                            new Pair<String, String>("name", m_username),
-                            new Pair<String, String>("password", m_password));
+                            new Pair<String, String>("user.name", m_username),
+                            new Pair<String, String>("user.password", m_password));
                     }
                 }
                 catch (final Exception ex)
@@ -101,7 +101,6 @@ public class AccountLoginActivity extends Activity
                     else
                         showErrorDialog(error);
                 }
-
             }
         });
 

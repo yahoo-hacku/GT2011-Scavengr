@@ -2,12 +2,15 @@ package net.moosen.huntr.activities;
 
 import android.app.TabActivity;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TabHost;
 import net.moosen.huntr.R;
 import net.moosen.huntr.activities.account.AccountLoginActivity;
+import net.moosen.huntr.activities.quests.QuestLogActivity;
+import net.moosen.huntr.activities.quests.QuestSearchActivity;
 import net.moosen.huntr.api.ApiHandler;
 import net.moosen.huntr.api.ApiHandler.API_ACTION;
 import net.moosen.huntr.exceptions.AuthenticationException;
@@ -24,14 +27,14 @@ public class HomeTabsActivity extends TabActivity
         setContentView(R.layout.home_tabs);
 
         TabHost host = getTabHost();
-
-        /*host.addTab(host.newTabSpec("one")
-                .setIndicator("CW")
-                .setContent(new Intent(this, CWBrowser.class)));
+        Resources res = getResources();
+        host.addTab(host.newTabSpec("one")
+                .setIndicator("Search", res.getDrawable(android.R.drawable.ic_menu_search))
+                .setContent(new Intent(this, QuestSearchActivity.class)));
 
         host.addTab(host.newTabSpec("two")
-                .setIndicator("Android")
-                .setContent(new Intent(this, AndroidBrowser.class)));*/
+                .setIndicator("Quests", res.getDrawable(android.R.drawable.ic_menu_compass))
+                .setContent(new Intent(this, QuestLogActivity.class)));
     }
 
     @Override

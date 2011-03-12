@@ -4,15 +4,21 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import android.content.SharedPreferences;
 import android.util.Base64;
 import android.util.Log;
 import android.util.Pair;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import net.moosen.huntr.activities.quests.Quest;
+import net.moosen.huntr.activities.quests.steps.QuestStep;
 import net.moosen.huntr.exceptions.AuthenticationException;
 
 /**
@@ -36,7 +42,7 @@ public class ApiHandler
     {
         PING("ping", "GET")
         {
-            public void handleResponse(final InputStream response) throws AuthenticationException
+            public <T> T handleResponse(final InputStream response) throws AuthenticationException
             {
                 final String api_key = GetInstance().prefs.getString(PREF_API_KEY, "");
                 Log.d(getClass().getCanonicalName(), " ###########API KEY " + api_key);
@@ -50,10 +56,12 @@ public class ApiHandler
                 }
                 else
                     throw new AuthenticationException("Invalid credentials.");
+
+                return null;
             }
         },
         REGISTER("register", "GET"){
-            public void handleResponse(final InputStream response) throws AuthenticationException
+            public <T> T handleResponse(final InputStream response) throws AuthenticationException
             {
                 Reader response_reader = new InputStreamReader(response);
                 ApiToken token = new Gson().fromJson(response_reader, ApiToken.class);
@@ -66,11 +74,12 @@ public class ApiHandler
                     GetInstance().setToken(token);
                     GetInstance().writeCredentials();
                 }
+                return null;
             }
         },
         LOGIN("login", "GET")
         {
-            public void handleResponse(final InputStream response) throws AuthenticationException
+            public <T> T handleResponse(final InputStream response) throws AuthenticationException
             {
                 Reader response_reader = new InputStreamReader(response);
                 ApiToken token = new Gson().fromJson(response_reader, ApiToken.class);
@@ -85,20 +94,39 @@ public class ApiHandler
                     GetInstance().setToken(token);
                     GetInstance().writeCredentials();
                 }
+                return null;
             }
         },
         LOGOUT("logout", "GET")
         {
-            public void handleResponse(final InputStream response)
+            public <T> T handleResponse(final InputStream response)
             {
                 GetInstance().clearCredentials();
+                return null;
             }
         },
         QUESTS("quests", "GET")
         {
-            public void handleResponse(final InputStream response)
+            @SuppressWarnings({"unchecked"})
+            public <T> T handleResponse(final InputStream response)
             {
-
+                Reader response_reader = new InputStreamReader(response);
+                Gson gson = new Gson();
+                Type collectionType = new TypeToken<Collection<Quest>>(){}.getType();
+                Collection<Quest> quest_col = gson.fromJson(response_reader, collectionType);
+                return (T) new ArrayList<Quest>(quest_col);
+            }
+        },
+        STEPS("steps", "GET")
+        {
+            @SuppressWarnings({"unchecked"})
+            public <T> T handleResponse(final InputStream response)
+            {
+                Reader response_reader = new InputStreamReader(response);
+                Gson gson = new Gson();
+                Type collectionType = new TypeToken<Collection<QuestStep>>(){}.getType();
+                Collection<QuestStep> quest_col = gson.fromJson(response_reader, collectionType);
+                return (T) new ArrayList<QuestStep>(quest_col);
             }
         };
 
@@ -118,7 +146,8 @@ public class ApiHandler
         {
             return this.http_verb;
         }
-        protected abstract void handleResponse(final InputStream response) throws AuthenticationException;
+
+        protected abstract <T> T handleResponse(final InputStream response) throws AuthenticationException;
     }
 
 
@@ -168,13 +197,23 @@ public class ApiHandler
         }
     }
 
-    public void doAction(final API_ACTION action, final Pair<String, String> ... args) throws AuthenticationException
+    public <T> T doAction(final API_ACTION action, final Pair<String, String> ... args) throws AuthenticationException
     {
-        String url_string = String.format("http://%s:%d/api/%s",
-                WEB_HOST, WEB_PORT,
-                action.getActionString());
+        String url_string = String.format("http://%s:%d/api/",
+                WEB_HOST, WEB_PORT);
+        T return_value = null;
+
         try
         {
+            String action_str;
+            if (action.equals(API_ACTION.STEPS))
+            {
+                action_str = String.format("quests/%d/steps", Integer.parseInt(args[0].second));
+            }
+            else
+            {
+                action_str = action.getActionString();
+            }
             if (action.getHttpVerb().equals("GET"))
             {
                 for (int i = 0; i < args.length; i++)
@@ -183,6 +222,9 @@ public class ApiHandler
                     url_string += String.format("%s%s=%s", separator, args[i].first, args[i].second);
                 }
             }
+
+            url_string += action_str;
+
             Log.d(getClass().getCanonicalName(), "##############URL STRING: " + url_string);
 
             URL url = new URL(url_string);
@@ -206,7 +248,7 @@ public class ApiHandler
                 AuthenticationException exception = null;
                 try
                 {
-                    action.handleResponse(connection.getInputStream());
+                    return_value = action.handleResponse(connection.getInputStream());
                 }
                 catch (final AuthenticationException ex)
                 {
@@ -234,6 +276,7 @@ public class ApiHandler
             Log.d(getClass().getCanonicalName(), "IO Exception: " + ex.getMessage());
             ex.printStackTrace();
         }
+        return return_value;
     }
 
     private boolean authenticate(final ApiToken api_key, final String username)

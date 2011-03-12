@@ -17,6 +17,13 @@
         <activity android:name=".activities.account.AccountLoginActivity"
                   android:label="@string/account_login_title"/>
         <activity android:name=".activities.HomeTabsActivity"
+                  android:label="@string/home_tabs_title"
+                  android:theme="@android:style/Theme.NoTitleBar"/>
+        <activity android:name=".activities.quests.QuestLogActivity"
+                  android:label="@string/home_tabs_title"/>
+        <activity android:name=".activities.quests.QuestSearchActivity"
+                  android:label="@string/home_tabs_title"/>
+        <activity android:name=".activities.quests.QuestAddActivity"
                   android:label="@string/home_tabs_title"/>
     </application>
     <uses-permission android:name="android.permission.INTERNET" />
