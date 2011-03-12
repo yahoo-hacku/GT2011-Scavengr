@@ -13,10 +13,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.TwoLineListItem;
 import net.moosen.huntr.R;
-import net.moosen.huntr.activities.quests.steps.QuestStep;
-import net.moosen.huntr.activities.quests.steps.QuestStepDto;
+import net.moosen.huntr.activities.quests.dto.QuestStepDto;
 
 /**
  * {"active":true,
@@ -39,7 +40,13 @@ public class Quest extends Activity
         setContentView(R.layout.quest);
         ArrayList<QuestStepDto> step_dtos = (ArrayList<QuestStepDto>) getIntent().getSerializableExtra("steps");
         QuestStepAdapter adapter = new QuestStepAdapter(step_dtos);
-
+        ListView steps = (ListView) findViewById(R.id.quest_steps);
+        steps.setAdapter(adapter);
+        steps.setOnItemClickListener(adapter);
+        final String desc = getIntent().getStringExtra("description");
+        final String name = getIntent().getStringExtra("name");
+        ((TextView) findViewById(R.id.quest_name)).setText(name);
+        ((TextView) findViewById(R.id.quest_description)).setText(desc);
         // TODO: fill stuff from intent
     }
 

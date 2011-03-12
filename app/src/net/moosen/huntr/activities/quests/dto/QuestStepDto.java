@@ -1,4 +1,4 @@
-package net.moosen.huntr.activities.quests.steps;
+package net.moosen.huntr.activities.quests.dto;
 
 import java.io.Serializable;
 

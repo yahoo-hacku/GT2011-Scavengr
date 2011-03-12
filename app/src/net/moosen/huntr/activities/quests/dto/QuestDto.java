@@ -1,10 +1,9 @@
-package net.moosen.huntr.activities.quests;
+package net.moosen.huntr.activities.quests.dto;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 
-import net.moosen.huntr.activities.quests.steps.QuestStepDto;
+import net.moosen.huntr.activities.quests.dto.QuestStepDto;
 
 /**
  * TODO: Enter class description.

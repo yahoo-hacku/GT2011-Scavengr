@@ -1,7 +1,8 @@
-package net.moosen.huntr.activities.quests.steps;
+package net.moosen.huntr.activities.quests;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.widget.TextView;
 import net.moosen.huntr.R;
 
 /**
@@ -22,6 +23,10 @@ public class QuestStep extends Activity {
     {
         super.onCreate(bundle);
         setContentView(R.layout.quest_step);
+        final String clue = getIntent().getStringExtra("clue");
+        final String seq = getIntent().getStringExtra("seq");
+        ((TextView) findViewById(R.id.step_num)).setText(seq);
+        ((TextView) findViewById(R.id.step_clue)).setText(clue);
 
         // etc
     }

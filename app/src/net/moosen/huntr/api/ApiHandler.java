@@ -18,7 +18,7 @@ import android.util.Pair;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import net.moosen.huntr.activities.quests.Quest;
-import net.moosen.huntr.activities.quests.steps.QuestStep;
+import net.moosen.huntr.activities.quests.QuestStep;
 import net.moosen.huntr.exceptions.AuthenticationException;
 
 /**
