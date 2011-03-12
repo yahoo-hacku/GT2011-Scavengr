@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Main</string>
-    <string name="create_account_name">Create Your Account</string>
+    <string name="app_name">Quest Huntr</string>
+    <string name="account_login_title">Login To Your Account</string>
+    <string name="account_create_title">Create Your Account</string>
 </resources>

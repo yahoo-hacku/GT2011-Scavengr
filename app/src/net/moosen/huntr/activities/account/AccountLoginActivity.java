@@ -1,4 +1,4 @@
-package net.moosen.huntr;
+package net.moosen.huntr.activities.account;
 
 import android.app.Activity;
 import android.content.Context;
@@ -11,10 +11,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import net.moosen.huntr.R;
 
 import static net.moosen.huntr.results.Results.ACCOUNT_CREATE_RESULT;
 
-public class LoginActivity extends Activity
+public class AccountLoginActivity extends Activity
 {
 
     private String m_username, m_password;
@@ -60,7 +61,7 @@ public class LoginActivity extends Activity
     protected void launchCreateAccount()
     {
         Intent intent = new Intent();
-        intent.setClass(this, CreateAccountActivity.class);
+        intent.setClass(this, AccountCreateActivity.class);
         intent.putExtra("username", m_username);
         startActivityForResult(intent, ACCOUNT_CREATE_RESULT);
     }
@@ -113,7 +114,7 @@ public class LoginActivity extends Activity
             @Override
             public void afterTextChanged(Editable editable)
             {
-                m_username = editable.toString();
+                m_password = editable.toString();
             }
         });
     }

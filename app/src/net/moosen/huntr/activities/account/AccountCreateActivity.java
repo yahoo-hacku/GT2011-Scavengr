@@ -1,4 +1,4 @@
-package net.moosen.huntr;
+package net.moosen.huntr.activities.account;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -6,13 +6,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import net.moosen.huntr.R;
 
 import static net.moosen.huntr.results.Account.ACCOUNT_CREATE_SUCCESS;
 
 /**
  * TODO: Enter class description.
  */
-public class CreateAccountActivity extends Activity {
+public class AccountCreateActivity extends Activity {
      /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState)

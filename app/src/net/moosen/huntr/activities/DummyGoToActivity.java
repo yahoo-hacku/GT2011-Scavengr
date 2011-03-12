@@ -1,4 +1,4 @@
-package net.moosen.huntr;
+package net.moosen.huntr.activities;
 
 import android.app.Activity;
 import android.os.Bundle;
