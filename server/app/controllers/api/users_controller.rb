@@ -23,12 +23,11 @@ module Api
     end
     
     def register
-      user = User.new({
-        name: params[:name],
-        password: params[:password],
-        password_confirmation: params[:password], # Don't require confirmation
-        email: params[:email]
-      })
+      if params[:user]
+        regData = params[:user]
+        regData[:password_confirmation] = regData[:password] # Skip Password Verification
+      end
+      user = User.new(regData)
       if user.save
         send_token user
       else

@@ -12,7 +12,7 @@ Huntr::Application.routes.draw do
     get "logout" => 'users#logout'
     get "register" => 'users#register'
     get "ping" => 'users#ping'
-    resources :quests
+    resources :user_quests
   end
 
   # root :to => "welcome#index"
