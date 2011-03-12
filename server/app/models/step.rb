@@ -1,12 +1,11 @@
 class Step < ActiveRecord::Base
-  self.include_root_in_json = false
   belongs_to :quest
   has_many :user_steps
   
   validates_presence_of :clue
   validates_uniqueness_of :clue, scope: 'quest_id'
   validates_numericality_of :seq, only_integer: true, greater_than: 0
-  [:lat, :long, :error_radius].each do |n|
+  [:lat, :lon, :error_radius].each do |n|
     validates_numericality_of n, greater_than: 0
   end
 end
