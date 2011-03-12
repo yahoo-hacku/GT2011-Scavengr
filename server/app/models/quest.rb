@@ -9,6 +9,10 @@ class Quest < ActiveRecord::Base
   
   before_save :default_values
   
+  def to_s
+    self.name
+  end
+  
   private
   
   def default_values

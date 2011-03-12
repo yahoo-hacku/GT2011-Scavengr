@@ -1,0 +1,13 @@
+<div class="container">
+	<div class="left">
+		<% @quest.steps.each do |step| %>
+			<div class="step">
+				<p><%=step.seq%>: <%= step.clue %></p>
+				<span class="geo"><%= step.lat %>, <%= step.lon %> (Error: <%= step.error_radius %>)</span>
+			</div>
+		<% end %>
+	</div>
+	<div class="main">
+		fdas
+	</div>
+</div>

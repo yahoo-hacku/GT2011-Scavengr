@@ -1,10 +1,16 @@
 Huntr::Application.routes.draw do
+  get "quests/index"
+
+  get "quests/show"
+
   get "login" => 'users#login', as: 'login'
   post 'login' => 'users#do_login'
 
   get "logout" => 'users#logout'
   
   match "register" => 'users#register'
+  
+  resources :quests
   
   # API
   namespace 'api' do
@@ -21,7 +27,7 @@ Huntr::Application.routes.draw do
     end
   end
 
-  # root :to => "welcome#index"
+  root :to => "quests#index"
 
   # See how all your routes lay out with "rake routes"
 end
