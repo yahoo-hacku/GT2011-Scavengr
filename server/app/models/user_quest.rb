@@ -6,7 +6,7 @@ class UserQuest < ActiveRecord::Base
   validates_presence_of :quest, :user
   
   before_save :default_values
-  
+
   private
   
   def default_values

@@ -1,4 +1,5 @@
 class Api::ApplicationController < ActionController::Base
+  
   before_filter :require_user, :map_params
 
   rescue_from ActiveRecord::RecordNotFound, :with => :smart_error_response
@@ -7,25 +8,30 @@ class Api::ApplicationController < ActionController::Base
   respond_to :json, :xml
 
   def show
-    respond_with(@active_object)
+    return_object @active_object
   end
 
   def update
     @active_object.attributes = @active_params
     @active_object.save!
-    respond_to do |format| 
-      format.json { render json: @active_object }
-      format.xml { render xml: @active_object }
-    end
+    return_object @active_object
   end
   alias :create :update
 
   def destroy
     @active_object.destroy
-    respond_with(@active_object)
+    return_object @active_object
   end
 
   private
+
+  def return_object(object)
+    puts "#{object}"
+    respond_to do |format| 
+      format.json { render json: object }
+      format.xml { render xml: object }
+    end
+  end
 
   # Error Handling
 
