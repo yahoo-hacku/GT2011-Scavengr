@@ -1,4 +1,5 @@
 class Comment < ActiveRecord::Base
+  self.include_root_in_json = false
   belongs_to :quest
   belongs_to :user
   

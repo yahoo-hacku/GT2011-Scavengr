@@ -1,4 +1,5 @@
 class Step < ActiveRecord::Base
+  self.include_root_in_json = false
   belongs_to :quest
   has_many :user_steps
   
