@@ -15,6 +15,7 @@ Huntr::Application.routes.draw do
     resources :user_quests
     resources :quests do
       resources :steps
+      resources :comments
     end
   end
 
