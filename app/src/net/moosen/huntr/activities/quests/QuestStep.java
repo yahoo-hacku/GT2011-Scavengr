@@ -70,7 +70,7 @@ public class QuestStep extends Activity {
                     {
                         DateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                         ApiHandler.GetInstance().doAction(API_ACTION.USER_STEPS_COMPLETE,
-                            new Pair<String, String>("quest.quest_id", step.getStep_id().toString()),
+                            new Pair<String, String>("quest.quest_id", quest.getQuest_id().toString()),
                             new Pair<String, String>("step.step_id", step.getStep_id().toString()),
                             new Pair<String, String>("step.datecompleted", fmt.format(new Date())));
                         Intent result = new Intent();

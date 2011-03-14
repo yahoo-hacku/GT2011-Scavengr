@@ -35,8 +35,6 @@ import static net.moosen.huntr.utils.Messages.Error;
  */
 public class ApiHandler
 {
-    private static Gson GSON = new Gson();
-
     private static ApiHandler s_instance = new ApiHandler();
 
     public static ApiHandler GetInstance() { return s_instance; }
@@ -79,7 +77,7 @@ public class ApiHandler
             public <T> T handleResponse(final InputStream response) throws AuthenticationException
             {
                 Reader response_reader = new InputStreamReader(response);
-                ApiToken token = GSON.fromJson(response_reader, ApiToken.class);
+                ApiToken token = new Gson().fromJson(response_reader, ApiToken.class);
                 if (token.getToken() == null)
                 {
                     throw new AuthenticationException("Username or Password was incorrect!");
@@ -97,7 +95,7 @@ public class ApiHandler
             public <T> T handleResponse(final InputStream response) throws AuthenticationException
             {
                 Reader response_reader = new InputStreamReader(response);
-                ApiToken token = GSON.fromJson(response_reader, ApiToken.class);
+                ApiToken token = new Gson().fromJson(response_reader, ApiToken.class);
                 Debug("HANDLING LOGIN: " + token.getToken());
                 if (token.getToken() == null)
                 {
@@ -127,7 +125,7 @@ public class ApiHandler
             {
                 Reader response_reader = new InputStreamReader(response);
                 Type collectionType = new TypeToken<Collection<QuestDto>>(){}.getType();
-                Collection<QuestDto> quest_col = GSON.fromJson(response_reader, collectionType);
+                Collection<QuestDto> quest_col = new Gson().fromJson(response_reader, collectionType);
                 return (T) new ArrayList<QuestDto>(quest_col);
             }
         },
@@ -138,7 +136,7 @@ public class ApiHandler
             {
                 Reader response_reader = new InputStreamReader(response);
                 Type collectionType = new TypeToken<Collection<UserQuestDto>>(){}.getType();
-                Collection<UserQuestDto> quest_col = GSON.fromJson(response_reader, collectionType);
+                Collection<UserQuestDto> quest_col = new Gson().fromJson(response_reader, collectionType);
 
                 return (T) new ArrayList<UserQuestDto>(quest_col);
             }
@@ -150,7 +148,7 @@ public class ApiHandler
             {
                 Reader response_reader = new InputStreamReader(response);
                 Type collectionType = new TypeToken<Collection<QuestStepDto>>(){}.getType();
-                Collection<QuestStepDto> quest_col = GSON.fromJson(response_reader, collectionType);
+                Collection<QuestStepDto> quest_col = new Gson().fromJson(response_reader, collectionType);
                 return (T) new ArrayList<QuestStepDto>(quest_col);
             }
         },
@@ -161,7 +159,7 @@ public class ApiHandler
             {
                 Reader response_reader = new InputStreamReader(response);
                 Type collectionType = new TypeToken<Collection<UserQuestStepDto>>(){}.getType();
-                Collection<UserQuestStepDto> quest_col = GSON.fromJson(response_reader, collectionType);
+                Collection<UserQuestStepDto> quest_col = new Gson().fromJson(response_reader, collectionType);
 
                 return (T) new ArrayList<UserQuestStepDto>(quest_col);
             }
@@ -175,7 +173,7 @@ public class ApiHandler
             public <T> T handleResponse(final InputStream response)
             {
                 Reader response_reader = new InputStreamReader(response);
-                return (T) GSON.fromJson(response_reader, UserQuestStepDto.class);
+                return (T) new Gson().fromJson(response_reader, UserQuestStepDto.class);
             }
 
             @Override
@@ -308,10 +306,10 @@ public class ApiHandler
             int response_code = connection.getResponseCode();
             if (response_code != HttpURLConnection.HTTP_UNAUTHORIZED)
             {
-                final InputStream response = connection.getInputStream();
+
                 try
                 {
-                    connection.disconnect();
+                    final InputStream response = connection.getInputStream();
                     return (T) action.handleResponse(response);
                 }
                 catch (final AuthenticationException ex)
@@ -319,11 +317,8 @@ public class ApiHandler
                     Error("ACTION RESULTED IN AN AUTH EXCEPTION. THROWING: " + ex.getMessage());
                     throw new AuthenticationException(ex.getMessage());
                 }
-                finally
-                {
-                    connection.disconnect();
-                }
-
+                catch (final IOException ex) { Debug("Connection had no response."); }
+                finally { connection.disconnect(); }
             }
             else
             {
