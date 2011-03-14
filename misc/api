@@ -1,10 +1,10 @@
 #! /bin/bash
 
-USER=ben
-KEY=710f39e0-4cb9-11e0-b082-002241fffe53
+USER=alex
+KEY=700be00a-4e23-11e0-833b-90e6ba4b8b9a
 HOST=localhost
 #HOST=128.61.120.161
-HOST=143.215.118.119
+HOST=192.168.1.102
 
 VERB=$1
 shift

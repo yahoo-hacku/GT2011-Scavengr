@@ -1,11 +1,14 @@
 package net.moosen.huntr.activities.quests;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +20,9 @@ import net.moosen.huntr.activities.quests.dto.UserQuestStepDto;
 import net.moosen.huntr.api.ApiHandler;
 import net.moosen.huntr.api.ApiHandler.API_ACTION;
 import net.moosen.huntr.exceptions.AuthenticationException;
+import net.moosen.huntr.exceptions.StaleApiTokenException;
+
+import static net.moosen.huntr.utils.Messages.ShowErrorDialog;
 
 /**
  * {"clue":null,
@@ -31,13 +37,12 @@ import net.moosen.huntr.exceptions.AuthenticationException;
  */
 public class QuestStep extends Activity {
 
-    public static final String CURRENT_STEP_CHANGED = "net.moosen.huntr.events.CHANGE_CURRENT_QUEST_STEP_EVENT";
-
     private UserQuestDto quest;
 
     private UserQuestStepDto step;
 
     private Integer current_sequence;
+    private Context getContext() { return this; }
     @Override
     public void onCreate(final Bundle bundle)
     {
@@ -54,40 +59,40 @@ public class QuestStep extends Activity {
 
         final boolean complete = step.isComplete();
 
-        final Intent back = new Intent(this, Quest.class);
         findViewById(R.id.check_step_btn).setOnClickListener(new View.OnClickListener()
         {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view)
+            {
                 if (!complete)
                 {
-                    back.putExtra("quest", quest);
-                    back.putExtra("step", step);
-                    current_sequence++;
-                    Log.d(getClass().getCanonicalName(), "------------------------Posting sequence: " + current_sequence);
-                    back.putExtra("current_sequence", current_sequence);
-                    //showErrorDialog("Yes! You are!");
-                    startActivity(back);
-                    finish();
-                }
-                else
-                {
-                    showErrorDialog("You have already completed this step!");
-                }
+                    try
+                    {
+                        DateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        ApiHandler.GetInstance().doAction(API_ACTION.USER_STEPS_COMPLETE,
+                            new Pair<String, String>("quest.quest_id", step.getStep_id().toString()),
+                            new Pair<String, String>("step.step_id", step.getStep_id().toString()),
+                            new Pair<String, String>("step.datecompleted", fmt.format(new Date())));
+                        Intent result = new Intent();
+                        result.putExtra("quest", quest);
+                        result.putExtra("step", step);
+                        result.putExtra("current_sequence", current_sequence);
+                        setResult(RESULT_OK, result);
+                        //finishActivity(STEP_RETURNED);
+                        finish();
+                    }
+                    catch (final AuthenticationException ex) { /* */ }
+                    catch (final StaleApiTokenException ex)
+                    {
+                        ShowErrorDialog(getContext(), "Your credentials have expired somehow...");
+                        startActivity(new Intent(getContext(), AccountLoginActivity.class));
+                        finish();
+                    }
 
+                }
+                else { ShowErrorDialog(getContext(), "You have already completed this step!");  }
             }
         });
-        // etc
-    }
-    protected void showErrorDialog(final String message)
-    {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(message)
-               .setCancelable(false)
-               .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                   public void onClick(DialogInterface dialog, int id) { }
-               });
-        builder.create().show();
     }
 
     @Override
@@ -96,6 +101,7 @@ public class QuestStep extends Activity {
         getMenuInflater().inflate(R.menu.main, menu);
         return super.onCreateOptionsMenu(menu);
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
@@ -113,6 +119,12 @@ public class QuestStep extends Activity {
         catch (final AuthenticationException ex)
         {
             //
+        }
+        catch (final StaleApiTokenException ex)
+        {
+            ShowErrorDialog(getContext(), "Your credentials have expired somehow...");
+            startActivity(new Intent(getContext(), AccountLoginActivity.class));
+            finish();
         }
 
         return super.onOptionsItemSelected(item);

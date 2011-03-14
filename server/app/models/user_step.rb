@@ -13,4 +13,7 @@ class UserStep < ActiveRecord::Base
     errors.add_to_base("invalid step") unless self.user_quest.quest.steps.exists?(self.step_id)
   end
   
+  def complete
+    self.complete = Time.now 
+  end  
 end

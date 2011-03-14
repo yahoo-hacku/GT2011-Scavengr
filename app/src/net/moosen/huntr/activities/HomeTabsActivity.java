@@ -14,6 +14,9 @@ import net.moosen.huntr.activities.quests.QuestSearchActivity;
 import net.moosen.huntr.api.ApiHandler;
 import net.moosen.huntr.api.ApiHandler.API_ACTION;
 import net.moosen.huntr.exceptions.AuthenticationException;
+import net.moosen.huntr.exceptions.StaleApiTokenException;
+
+import static net.moosen.huntr.utils.Messages.ShowErrorDialog;
 
 /**
  * TODO: Enter class description.
@@ -29,12 +32,12 @@ public class HomeTabsActivity extends TabActivity
         TabHost host = getTabHost();
         Resources res = getResources();
         host.addTab(host.newTabSpec("one")
+                .setIndicator("Quests", res.getDrawable(android.R.drawable.ic_menu_compass))
+                .setContent(new Intent(this, QuestLogActivity.class)));
+        host.addTab(host.newTabSpec("two")
                 .setIndicator("Search", res.getDrawable(android.R.drawable.ic_menu_search))
                 .setContent(new Intent(this, QuestSearchActivity.class)));
 
-        host.addTab(host.newTabSpec("two")
-                .setIndicator("Quests", res.getDrawable(android.R.drawable.ic_menu_compass))
-                .setContent(new Intent(this, QuestLogActivity.class)));
     }
 
     @Override
@@ -58,9 +61,12 @@ public class HomeTabsActivity extends TabActivity
                     break;
             }
         }
-        catch (final AuthenticationException ex)
+        catch (final AuthenticationException ex) { /* */ }
+        catch (final StaleApiTokenException ex)
         {
-            //
+            ShowErrorDialog(this, "Your credentials have expired somehow...");
+            startActivity(new Intent(this, AccountLoginActivity.class));
+            finish();
         }
 
         return super.onOptionsItemSelected(item);

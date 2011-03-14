@@ -91,4 +91,22 @@ public class UserQuestStepDto implements Serializable
     public void setUser_quest_id(Integer user_quest_id) {
         this.user_quest_id = user_quest_id;
     }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        UserQuestStepDto that = (UserQuestStepDto) o;
+        return ((id != null && that.id != null) && (id.equals(that.id) && step_id.equals(that.step_id)));
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (step_id != null ? step_id.hashCode() : 0);
+        return result;
+    }
 }

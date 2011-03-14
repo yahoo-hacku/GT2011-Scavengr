@@ -2,25 +2,21 @@ package net.moosen.huntr.activities.quests;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.view.Menu;
 import android.view.MenuItem;
 import net.moosen.huntr.R;
 import net.moosen.huntr.activities.account.AccountLoginActivity;
 import net.moosen.huntr.api.ApiHandler;
 import net.moosen.huntr.api.ApiHandler.API_ACTION;
 import net.moosen.huntr.exceptions.AuthenticationException;
+import net.moosen.huntr.exceptions.StaleApiTokenException;
+
+import static net.moosen.huntr.utils.Messages.ShowErrorDialog;
 
 /**
  * TODO: Enter class description.
  */
 public class QuestSearchActivity extends Activity
 {
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
   @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
@@ -35,11 +31,13 @@ public class QuestSearchActivity extends Activity
                     break;
             }
         }
-        catch (final AuthenticationException ex)
+        catch (final AuthenticationException ex) { /* */ }
+        catch (final StaleApiTokenException ex)
         {
-            //
+            ShowErrorDialog(this, "Your credentials have expired somehow...");
+            startActivity(new Intent(this, AccountLoginActivity.class));
+            finish();
         }
-
         return super.onOptionsItemSelected(item);
     }
 }

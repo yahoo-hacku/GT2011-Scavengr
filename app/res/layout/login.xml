@@ -19,7 +19,7 @@
         android:id="@+id/l_username"
         android:layout_width="200px"
         android:layout_height="wrap_content"
-        android:text="ben"
+        android:text="alex"
         android:singleLine="true"
         android:textSize="18sp"
         android:layout_x="60px"
@@ -40,7 +40,7 @@
         android:layout_height="wrap_content"
         android:password="true"
         android:singleLine="true"
-        android:text="ben"
+        android:text="asdf"
         android:textSize="18sp"
         android:layout_x="60px"
         android:layout_y="175px"/>
