@@ -16,7 +16,7 @@ gem 'bcrypt-ruby'
 gem 'uuidtools'
 
 # Geo stuff
-gem "geokit-rails3"
+gem "geokit-rails3", git: 'git://github.com/sionide21/geokit-rails3.git'
 
 # Use unicorn as the web server
 gem 'unicorn'
