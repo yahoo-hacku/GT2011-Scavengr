@@ -1,5 +1,4 @@
 class Api::StepsController < Api::ApplicationController
-  before_filter :setup_api, :except => [ :index, :next_seq ]
 
   def index
     @quest = @user.quests.find(params[:quest_id])

@@ -1,5 +1,4 @@
 class Api::UserQuestsController < Api::ApplicationController
-  before_filter :setup_api, :except => [ :index ]
 
   def index
     respond_with @user.user_quests

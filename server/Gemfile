@@ -17,6 +17,7 @@ gem 'uuidtools'
 
 # Geo stuff
 gem "geokit-rails3", git: 'git://github.com/sionide21/geokit-rails3.git'
+#gem "geokit-rails3", path: '/Users/ben/Documents/Projects/geokit-rails3'
 
 # Use unicorn as the web server
 gem 'unicorn'

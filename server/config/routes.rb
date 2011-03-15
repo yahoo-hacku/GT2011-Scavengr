@@ -28,6 +28,7 @@ Huntr::Application.routes.draw do
         get :next_seq, :on => :collection
       end
       resources :comments
+      get 'nearby', :on => :collection
     end
   end
 

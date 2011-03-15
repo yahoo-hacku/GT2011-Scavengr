@@ -1,12 +1,14 @@
 class Api::QuestsController < Api::ApplicationController
-  before_filter :setup_api, :except => [ :index ]
-
+  
   def index
     respond_with @user.quests
   end
 
   def nearby
-    
+    args = [:lat, :lon, :within].map do |s|
+      params[s].to_f
+    end
+    respond_with Quest.nearby(*args)
   end
 
   private

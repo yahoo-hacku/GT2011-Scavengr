@@ -1,6 +1,8 @@
 class Api::ApplicationController < ActionController::Base
   
   before_filter :require_user, :map_params
+  
+  before_filter :setup_api, only: [:show, :update, :destroy, :create]
 
   rescue_from ActiveRecord::RecordNotFound, :with => :smart_error_response
   rescue_from ActiveRecord::RecordInvalid, :with => :smart_error_response

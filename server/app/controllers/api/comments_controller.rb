@@ -1,5 +1,4 @@
 class Api::CommentsController < Api::ApplicationController
-  before_filter :setup_api, :except => [ :index ]
 
   def index
     @quest = @user.quests.find(params[:quest_id])

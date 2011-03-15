@@ -12,9 +12,12 @@ class Quest < ActiveRecord::Base
   def to_s
     self.name
   end
-
-  def near(lat,lon,r)
-    
+  
+  # Find nearby quests based on first step
+  # r is in feet
+  def self.nearby(lat, lon, r = 500)
+    r /= 5280
+    Step.start.geo_scope(:origin => [lat, lon], within: r).collect { |c| c.quest }
   end
   
   private

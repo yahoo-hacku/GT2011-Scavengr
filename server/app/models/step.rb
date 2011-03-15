@@ -2,7 +2,7 @@ class Step < ActiveRecord::Base
   belongs_to :quest
   has_many :user_steps
 
-  acts_as_mappable default_unit: :feet, lng_column_name: :lon
+  acts_as_mappable :lng_column_name => :lon
 
   default_scope order(:seq)
   
@@ -14,6 +14,8 @@ class Step < ActiveRecord::Base
   validates_numericality_of :lon
   validates_numericality_of :error_radius, greater_than: 0
   before_save :default_values
+  
+  scope :start, where(seq: 1)
   
   def next_seq
     count = self.quest.steps.maximum(:seq)
