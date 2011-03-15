@@ -12,6 +12,10 @@ class Quest < ActiveRecord::Base
   def to_s
     self.name
   end
+
+  def near(lat,lon,r)
+    
+  end
   
   private
   

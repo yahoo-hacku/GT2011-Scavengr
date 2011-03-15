@@ -1,6 +1,10 @@
 class Step < ActiveRecord::Base
   belongs_to :quest
   has_many :user_steps
+
+  acts_as_mappable default_unit: :feet, lng_column_name: :lon
+
+  default_scope order(:seq)
   
   validates_presence_of :clue
   validates_uniqueness_of :clue, scope: 'quest_id'

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110312102118) do
+ActiveRecord::Schema.define(:version => 20110314155125) do
 
   create_table "auth_tokens", :force => true do |t|
     t.string   "token"
@@ -48,6 +48,8 @@ ActiveRecord::Schema.define(:version => 20110312102118) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "steps", ["lat", "lon"], :name => "index_steps_on_lat_and_lon"
 
   create_table "user_quests", :force => true do |t|
     t.integer  "user_id"

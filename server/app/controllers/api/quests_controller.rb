@@ -5,6 +5,10 @@ class Api::QuestsController < Api::ApplicationController
     respond_with @user.quests
   end
 
+  def nearby
+    
+  end
+
   private
 
   def setup_api
