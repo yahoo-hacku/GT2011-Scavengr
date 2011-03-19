@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,6 +26,7 @@ import net.moosen.huntr.activities.quests.dto.UserQuestDto;
 import net.moosen.huntr.activities.quests.dto.UserQuestStepDto;
 import net.moosen.huntr.api.ApiHandler;
 import net.moosen.huntr.api.ApiHandler.API_ACTION;
+import net.moosen.huntr.api.NetworkCaller;
 import net.moosen.huntr.exceptions.AuthenticationException;
 import net.moosen.huntr.exceptions.StaleApiTokenException;
 
@@ -41,7 +43,7 @@ import static net.moosen.huntr.utils.Messages.ShowErrorDialog;
 "time_limit":null,
 "updated_at":"2011-03-12T06:41:53Z"
  */
-public class Quest extends Activity
+public class Quest extends Activity implements NetworkCaller
 {
     protected static Integer STEP_RETURNED = 10;
     private Integer current_sequence = 0;
@@ -90,6 +92,12 @@ public class Quest extends Activity
                 step_adapter.notifyDataSetChanged();
             }
         }
+    }
+
+    @Override
+    public void receivedNetworkResponse(Message m)
+    {
+
     }
 
     private void launchQuestStep(UserQuestStepDto step)
@@ -183,7 +191,7 @@ public class Quest extends Activity
             switch (item.getItemId())
             {
                 case R.id.menu_logout:
-                    ApiHandler.GetInstance().doAction(API_ACTION.LOGOUT);
+                    ApiHandler.GetInstance().doAction(this, API_ACTION.LOGOUT);
                     startActivity(new Intent(this, AccountLoginActivity.class));
                     finish();
                     break;

@@ -73,4 +73,16 @@ public final class Messages {
                });
         builder.create().show();
     }
+
+    public static void ShowErrorDialog(final Context context, final String title, final String message)
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage(message)
+                .setTitle(title)
+               .setCancelable(false)
+               .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                   public void onClick(DialogInterface dialog, int id) { }
+               });
+        builder.create().show();
+    }
 }

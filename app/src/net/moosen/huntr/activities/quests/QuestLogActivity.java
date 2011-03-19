@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Message;
 import android.text.TextUtils;
 import android.util.Pair;
 import android.view.LayoutInflater;
@@ -23,6 +24,7 @@ import net.moosen.huntr.activities.quests.dto.UserQuestDto;
 import net.moosen.huntr.activities.quests.dto.UserQuestStepDto;
 import net.moosen.huntr.api.ApiHandler;
 import net.moosen.huntr.api.ApiHandler.API_ACTION;
+import net.moosen.huntr.api.NetworkCaller;
 import net.moosen.huntr.exceptions.AuthenticationException;
 import net.moosen.huntr.exceptions.StaleApiTokenException;
 
@@ -32,7 +34,7 @@ import static net.moosen.huntr.utils.Messages.ShowErrorDialog;
 /**
  * TODO: Enter class description.
  */
-public class QuestLogActivity extends Activity
+public class QuestLogActivity extends Activity implements NetworkCaller
 {
 
     @Override
@@ -44,12 +46,12 @@ public class QuestLogActivity extends Activity
 
         try
         {
-            final ArrayList<UserQuestDto> quests = ApiHandler.GetInstance().doAction(API_ACTION.USER_QUESTS);
+            final ArrayList<UserQuestDto> quests = ApiHandler.GetInstance().doAction(this, API_ACTION.USER_QUESTS);
             final UserQuestAdapter adapter = new UserQuestAdapter(quests);
             for (UserQuestDto quest : quests)
             {
                 quest.setSteps(ApiHandler.GetInstance().<ArrayList<UserQuestStepDto>>doAction(
-                        API_ACTION.USER_STEPS,
+                        this, API_ACTION.USER_STEPS,
                         new Pair<String, String>("step.step_id", quest.getQuest_id().toString())));
             }
 
@@ -63,6 +65,12 @@ public class QuestLogActivity extends Activity
             startActivity(new Intent(this, AccountLoginActivity.class));
             finish();
         }
+    }
+
+    @Override
+    public synchronized void receivedNetworkResponse(final Message m)
+    {
+
     }
 
     private void launchUserQuest(UserQuestDto quest)
@@ -129,7 +137,7 @@ public class QuestLogActivity extends Activity
             switch (item.getItemId())
             {
                 case R.id.menu_logout:
-                    ApiHandler.GetInstance().doAction(API_ACTION.LOGOUT);
+                    ApiHandler.GetInstance().doAction(this, API_ACTION.LOGOUT);
                     startActivity(new Intent(this, AccountLoginActivity.class));
                     finish();
                     break;

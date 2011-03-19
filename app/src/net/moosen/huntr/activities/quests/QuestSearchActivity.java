@@ -2,11 +2,13 @@ package net.moosen.huntr.activities.quests;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Message;
 import android.view.MenuItem;
 import net.moosen.huntr.R;
 import net.moosen.huntr.activities.account.AccountLoginActivity;
 import net.moosen.huntr.api.ApiHandler;
 import net.moosen.huntr.api.ApiHandler.API_ACTION;
+import net.moosen.huntr.api.NetworkCaller;
 import net.moosen.huntr.exceptions.AuthenticationException;
 import net.moosen.huntr.exceptions.StaleApiTokenException;
 
@@ -15,9 +17,15 @@ import static net.moosen.huntr.utils.Messages.ShowErrorDialog;
 /**
  * TODO: Enter class description.
  */
-public class QuestSearchActivity extends Activity
+public class QuestSearchActivity extends Activity implements NetworkCaller
 {
-  @Override
+    @Override
+    public void receivedNetworkResponse(Message m)
+    {
+
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
         try
@@ -25,7 +33,7 @@ public class QuestSearchActivity extends Activity
             switch (item.getItemId())
             {
                 case R.id.menu_logout:
-                    ApiHandler.GetInstance().doAction(API_ACTION.LOGOUT);
+                    ApiHandler.GetInstance().doAction(this, API_ACTION.LOGOUT);
                     startActivity(new Intent(this, AccountLoginActivity.class));
                     finish();
                     break;

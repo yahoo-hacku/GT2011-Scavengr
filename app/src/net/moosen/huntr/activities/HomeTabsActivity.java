@@ -4,6 +4,7 @@ import android.app.TabActivity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TabHost;
@@ -13,6 +14,7 @@ import net.moosen.huntr.activities.quests.QuestLogActivity;
 import net.moosen.huntr.activities.quests.QuestSearchActivity;
 import net.moosen.huntr.api.ApiHandler;
 import net.moosen.huntr.api.ApiHandler.API_ACTION;
+import net.moosen.huntr.api.NetworkCaller;
 import net.moosen.huntr.exceptions.AuthenticationException;
 import net.moosen.huntr.exceptions.StaleApiTokenException;
 
@@ -21,7 +23,7 @@ import static net.moosen.huntr.utils.Messages.ShowErrorDialog;
 /**
  * TODO: Enter class description.
  */
-public class HomeTabsActivity extends TabActivity
+public class HomeTabsActivity extends TabActivity implements NetworkCaller
 {
     @Override
     public void onCreate(Bundle bundle)
@@ -41,6 +43,12 @@ public class HomeTabsActivity extends TabActivity
     }
 
     @Override
+    public void receivedNetworkResponse(Message m)
+    {
+
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
         getMenuInflater().inflate(R.menu.main, menu);
@@ -55,7 +63,7 @@ public class HomeTabsActivity extends TabActivity
             switch (item.getItemId())
             {
                 case R.id.menu_logout:
-                    ApiHandler.GetInstance().doAction(API_ACTION.LOGOUT);
+                    ApiHandler.GetInstance().doAction(this, API_ACTION.LOGOUT);
                     startActivity(new Intent(this, AccountLoginActivity.class));
                     finish();
                     break;

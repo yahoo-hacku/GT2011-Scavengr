@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Message;
 import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,6 +20,7 @@ import net.moosen.huntr.activities.quests.dto.UserQuestDto;
 import net.moosen.huntr.activities.quests.dto.UserQuestStepDto;
 import net.moosen.huntr.api.ApiHandler;
 import net.moosen.huntr.api.ApiHandler.API_ACTION;
+import net.moosen.huntr.api.NetworkCaller;
 import net.moosen.huntr.exceptions.AuthenticationException;
 import net.moosen.huntr.exceptions.StaleApiTokenException;
 
@@ -35,7 +37,8 @@ import static net.moosen.huntr.utils.Messages.ShowErrorDialog;
  * "seq":0,
  * "updated_at":"2011-03-12T07:39:19Z"}
  */
-public class QuestStep extends Activity {
+public class QuestStep extends Activity implements NetworkCaller
+{
 
     private UserQuestDto quest;
 
@@ -69,7 +72,7 @@ public class QuestStep extends Activity {
                     try
                     {
                         DateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                        ApiHandler.GetInstance().doAction(API_ACTION.USER_STEPS_COMPLETE,
+                        ApiHandler.GetInstance().doAction(getCaller(), API_ACTION.USER_STEPS_COMPLETE,
                             new Pair<String, String>("quest.quest_id", quest.getQuest_id().toString()),
                             new Pair<String, String>("step.step_id", step.getStep_id().toString()),
                             new Pair<String, String>("step.datecompleted", fmt.format(new Date())));
@@ -96,6 +99,14 @@ public class QuestStep extends Activity {
     }
 
     @Override
+    public void receivedNetworkResponse(Message m)
+    {
+
+    }
+
+    protected NetworkCaller getCaller() { return this; }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
         getMenuInflater().inflate(R.menu.main, menu);
@@ -110,16 +121,13 @@ public class QuestStep extends Activity {
             switch (item.getItemId())
             {
                 case R.id.menu_logout:
-                    ApiHandler.GetInstance().doAction(API_ACTION.LOGOUT);
+                    ApiHandler.GetInstance().doAction(this, API_ACTION.LOGOUT);
                     startActivity(new Intent(this, AccountLoginActivity.class));
                     finish();
                     break;
             }
         }
-        catch (final AuthenticationException ex)
-        {
-            //
-        }
+        catch (final AuthenticationException ex) { /* */ }
         catch (final StaleApiTokenException ex)
         {
             ShowErrorDialog(getContext(), "Your credentials have expired somehow...");

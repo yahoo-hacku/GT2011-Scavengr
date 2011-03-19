@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -15,11 +16,12 @@ import net.moosen.huntr.R;
 import net.moosen.huntr.activities.HomeTabsActivity;
 import net.moosen.huntr.api.ApiHandler;
 import net.moosen.huntr.api.ApiHandler.API_ACTION;
+import net.moosen.huntr.api.NetworkCaller;
 
 import static net.moosen.huntr.results.Results.ACCOUNT_CREATE_RESULT;
 import static net.moosen.huntr.utils.Messages.ShowErrorDialog;
 
-public class AccountLoginActivity extends Activity
+public class AccountLoginActivity extends Activity implements NetworkCaller
 {
 
     private String m_username, m_password;
@@ -32,6 +34,12 @@ public class AccountLoginActivity extends Activity
         setContentView(R.layout.login);
         attachButtonListeners();
         attachCredentialsListeners();
+    }
+
+    @Override
+    public void receivedNetworkResponse(Message m)
+    {
+
     }
 
     protected void launchCreateAccount()
@@ -63,7 +71,7 @@ public class AccountLoginActivity extends Activity
                     }
                     else
                     {
-                        ApiHandler.GetInstance().doAction(API_ACTION.LOGIN,
+                        ApiHandler.GetInstance().doAction(getCaller(), API_ACTION.LOGIN,
                             new Pair<String, String>("user.name", m_username),
                             new Pair<String, String>("user.password", m_password));
                     }
@@ -91,6 +99,8 @@ public class AccountLoginActivity extends Activity
             @Override public void onClick(View view) { launchCreateAccount(); }
         });
     }
+
+    protected NetworkCaller getCaller() { return this; }
 
     protected void attachCredentialsListeners()
     {

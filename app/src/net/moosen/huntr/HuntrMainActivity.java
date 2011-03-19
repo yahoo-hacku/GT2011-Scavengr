@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -13,6 +14,7 @@ import net.moosen.huntr.activities.HomeTabsActivity;
 import net.moosen.huntr.activities.account.AccountLoginActivity;
 import net.moosen.huntr.api.ApiHandler;
 import net.moosen.huntr.api.ApiHandler.API_ACTION;
+import net.moosen.huntr.api.NetworkCaller;
 
 import static net.moosen.huntr.api.ApiHandler.PREF_API_KEY;
 import static net.moosen.huntr.api.ApiHandler.PREF_USERNAME;
@@ -20,7 +22,8 @@ import static net.moosen.huntr.api.ApiHandler.PREF_USERNAME;
 /**
  * TODO: Enter class description.
  */
-public class HuntrMainActivity extends Activity {
+public class HuntrMainActivity extends Activity implements NetworkCaller
+{
 
     private static final int PROGRESS = 0x1;
 
@@ -72,7 +75,7 @@ public class HuntrMainActivity extends Activity {
                             // ping server
                             try {
                                 Log.d(getClass().getCanonicalName(), "###### PINGING");
-                                ApiHandler.GetInstance().doAction(API_ACTION.PING);
+                                ApiHandler.GetInstance().doAction(getCaller(), API_ACTION.PING);
                                 handlePingResult(true);
                                 return;
 
@@ -94,6 +97,18 @@ public class HuntrMainActivity extends Activity {
 
             }
         }).start();
+    }
+
+    protected NetworkCaller getCaller()
+    {
+        return this;
+    }
+
+
+    @Override
+    public void receivedNetworkResponse(Message m)
+    {
+
     }
 
     @Override

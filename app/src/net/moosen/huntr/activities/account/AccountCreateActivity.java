@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Message;
 import android.util.Pair;
 import android.view.View;
 import android.widget.EditText;
@@ -11,6 +12,7 @@ import net.moosen.huntr.R;
 import net.moosen.huntr.activities.HomeTabsActivity;
 import net.moosen.huntr.api.ApiHandler;
 import net.moosen.huntr.api.ApiHandler.API_ACTION;
+import net.moosen.huntr.api.NetworkCaller;
 
 import static net.moosen.huntr.utils.Messages.Error;
 import static net.moosen.huntr.utils.Messages.ShowErrorDialog;
@@ -18,8 +20,14 @@ import static net.moosen.huntr.utils.Messages.ShowErrorDialog;
 /**
  * TODO: Enter class description.
  */
-public class AccountCreateActivity extends Activity {
-     /** Called when the activity is first created. */
+public class AccountCreateActivity extends Activity implements NetworkCaller
+{
+    @Override
+    public void receivedNetworkResponse(Message m) {
+
+    }
+
+    /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
@@ -29,6 +37,7 @@ public class AccountCreateActivity extends Activity {
         Intent data = getIntent();
         ((EditText) findViewById(R.id.c_username)).setText(data.getStringExtra("username"));
     }
+
 
     private Context getContext() { return this; }
 
@@ -46,7 +55,7 @@ public class AccountCreateActivity extends Activity {
                     final String username = ((EditText) findViewById(R.id.c_username)).getText().toString();
                     final String password = ((EditText) findViewById(R.id.c_password)).getText().toString();
                     final String email = ((EditText) findViewById(R.id.c_email)).getText().toString();
-                    ApiHandler.GetInstance().doAction(API_ACTION.REGISTER,
+                    ApiHandler.GetInstance().doAction(getCaller(), API_ACTION.REGISTER,
                             new Pair<String, String>("user.name", username),
                             new Pair<String, String>("user.password", password),
                             new Pair<String, String>("user.email", email));
@@ -68,4 +77,6 @@ public class AccountCreateActivity extends Activity {
             }
         });
     }
+
+    protected NetworkCaller getCaller() { return this; }
 }

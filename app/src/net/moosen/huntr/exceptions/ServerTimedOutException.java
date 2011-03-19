@@ -1,23 +1,23 @@
 package net.moosen.huntr.exceptions;
 
-import android.util.Log;
+import static net.moosen.huntr.utils.Messages.Debug;
 
 /**
  * TODO: Enter class description.
  */
-public class AuthenticationException extends Exception implements HuntrException
+public class ServerTimedOutException extends Exception implements HuntrException
 {
     private String error;
-    public AuthenticationException()
+    public ServerTimedOutException()
     {
         super();
         this.error = "An error occurred during client authentication.";
     }
 
-    public AuthenticationException(final String error)
+    public ServerTimedOutException(final String error)
     {
         super(error);
-        Log.d(getClass().getCanonicalName(), "AUTHENTICATION EXCEPTION BEING THROWN.");
+        Debug("SERVERTIMEDOUT EXCEPTION BEING THROWN.");
         this.error = error;
     }
 
